@@ -1,0 +1,2 @@
+/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../../lib/libclangTidyLLVMModule.a CMakeFiles/clangTidyLLVMModule.dir/HeaderGuardCheck.cpp.o CMakeFiles/clangTidyLLVMModule.dir/IncludeOrderCheck.cpp.o CMakeFiles/clangTidyLLVMModule.dir/LLVMTidyModule.cpp.o CMakeFiles/clangTidyLLVMModule.dir/TwineLocalCheck.cpp.o
+/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../../lib/libclangTidyLLVMModule.a

@@ -1,0 +1,2 @@
+/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../lib/libclangRewrite.a CMakeFiles/clangRewrite.dir/DeltaTree.cpp.o CMakeFiles/clangRewrite.dir/HTMLRewrite.cpp.o CMakeFiles/clangRewrite.dir/RewriteRope.cpp.o CMakeFiles/clangRewrite.dir/Rewriter.cpp.o CMakeFiles/clangRewrite.dir/TokenRewriter.cpp.o
+/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../lib/libclangRewrite.a

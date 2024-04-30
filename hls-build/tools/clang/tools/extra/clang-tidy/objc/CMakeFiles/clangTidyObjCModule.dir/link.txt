@@ -1,0 +1,2 @@
+/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../../lib/libclangTidyObjCModule.a CMakeFiles/clangTidyObjCModule.dir/AvoidNSErrorInitCheck.cpp.o CMakeFiles/clangTidyObjCModule.dir/AvoidSpinlockCheck.cpp.o CMakeFiles/clangTidyObjCModule.dir/ForbiddenSubclassingCheck.cpp.o CMakeFiles/clangTidyObjCModule.dir/ObjCTidyModule.cpp.o CMakeFiles/clangTidyObjCModule.dir/PropertyDeclarationCheck.cpp.o
+/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../../lib/libclangTidyObjCModule.a

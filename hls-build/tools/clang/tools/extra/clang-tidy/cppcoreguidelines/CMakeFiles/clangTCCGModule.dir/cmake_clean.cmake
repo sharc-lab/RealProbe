@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "../../../../../../lib/libclangTCCGModule.a"
+  "../../../../../../lib/libclangTCCGModule.pdb"
+  "CMakeFiles/clangTCCGModule.dir/AvoidGotoCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/AvoidGotoCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/CppCoreGuidelinesTidyModule.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/CppCoreGuidelinesTidyModule.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/InterfacesGlobalInitCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/InterfacesGlobalInitCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/NoMallocCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/NoMallocCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/OwningMemoryCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/OwningMemoryCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/ProBoundsArrayToPointerDecayCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/ProBoundsArrayToPointerDecayCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/ProBoundsConstantArrayIndexCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/ProBoundsConstantArrayIndexCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/ProBoundsPointerArithmeticCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/ProBoundsPointerArithmeticCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeConstCastCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeConstCastCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeCstyleCastCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeCstyleCastCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeMemberInitCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeMemberInitCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeReinterpretCastCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeReinterpretCastCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeStaticCastDowncastCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeStaticCastDowncastCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeUnionAccessCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeUnionAccessCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeVarargCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/ProTypeVarargCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/SlicingCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/SlicingCheck.cpp.o.d"
+  "CMakeFiles/clangTCCGModule.dir/SpecialMemberFunctionsCheck.cpp.o"
+  "CMakeFiles/clangTCCGModule.dir/SpecialMemberFunctionsCheck.cpp.o.d"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/clangTCCGModule.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

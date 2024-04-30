@@ -1,0 +1,1518 @@
+{
+  "aggregate": {
+    "Desc": "Specify that a struct or class variable should be aggregated.",
+    "Objects": [
+      "Struct",
+      "Array"
+    ],
+    "Options": {
+      "auto": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "compact"
+      },
+      "bit": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "compact"
+      },
+      "byte": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "compact"
+      },
+      "compact": {
+        "Default": "auto",
+        "Desc": "Specify the padding alignment",
+        "EnumValueList": [
+          "bit",
+          "byte",
+          "none",
+          "auto"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "none": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "compact"
+      },
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "alias": {
+    "Desc": "Specify that two or more M_AXI pointer arguments all point into the same underlying buffer in DRAM (DDR or HBM) and indicate any aliasing between the pointers by setting the distance between them",
+    "Objects": [
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "distance": {
+        "Desc": "Specifies the difference between the pointer values passed to each pair of successive ports in the list",
+        "Format": "VariableExprFormat"
+      },
+      "offset": {
+        "Desc": "Specifies the offset of the pointer passed to each port in the -ports list with respect to the origin of the array",
+        "Format": "VariableExprFormat"
+      },
+      "ports": {
+        "Desc": "Specifies the list of ports that point into the same MAXI-mapped array",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "allocation": {
+    "ChildList": [
+      "function_allocation",
+      "operation_allocation"
+    ],
+    "ChildSelectOptionName": "type",
+    "Desc": "Specify a limit for the number of operations, implementations, or functions used. This can force the sharing or hardware resources and may increase latency.",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "function": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type"
+      },
+      "instances": {
+        "Desc": "A function or operator. The function can be any function in the original C code which has not been inlined. Valid operators are: add sub mul icmp sdiv udiv srem urem lshr ashr shl fadd fsub fmul fdiv dadd dsub dmul ddiv fcmp frem fsqrt frsqrt frecip dsqrt drecip dcmp drsqrt flog dlog fexp dexp",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      },
+      "limit": {
+        "Desc": "A maximum limit on the number of instances (of the type defined by the -type option) to be used in the RTL design.",
+        "Format": "IntConstExprFormat",
+        "Optional": false
+      },
+      "operation": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type"
+      },
+      "type": {
+        "Default": "function",
+        "Desc": "",
+        "EnumValueList": [
+          "operation",
+          "function"
+        ],
+        "Format": "EnumExprFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "ap_scalar": {
+    "Desc": "scalar interface pragmas",
+    "Objects": [
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "depth": {
+        "Desc": "Specifies the maximum number of samples for the test bench to process. This is required for pointer interfaces using ap_fifo mode.",
+        "Format": "IntConstExprFormat"
+      },
+      "latency": {
+        "Desc": "Specify the latency for ap_memory and m_axi interfaces",
+        "Format": "IntConstExprFormat"
+      },
+      "register": {
+        "Desc": "Registers the signal and any relevant protocol signals and instructs the signals to persist until at least the last cycle of the function execution",
+        "Format": "PresentFormat"
+      }
+    },
+    "ParentPragma": "interface",
+    "Visibility": "Public"
+  },
+  "ap_stable": {
+    "Desc": "ap_stable for call convertion",
+    "Objects": [
+      "Parameter",
+      "Function"
+    ],
+    "Options": {},
+    "ParentPragma": "interface",
+    "Visibility": "Public"
+  },
+  "array_partition": {
+    "Desc": "Partitions large arrays into multiple smaller arrays or into individual registers, to improve access to data and remove block RAM bottlenecks.",
+    "Objects": [
+      "Array",
+      "Function"
+    ],
+    "Options": {
+      "block": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type"
+      },
+      "complete": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type"
+      },
+      "cyclic": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type"
+      },
+      "dim": {
+        "Default": 1,
+        "Desc": "This is only relevant for multi-dimensional arrays and specifies which dimension of the array is to be partitioned. If a value of 0 is used, all dimensions will be partitioned with the specified options. Any other value will partition only the specified dimension.",
+        "Format": "IntConstExprFormat"
+      },
+      "dynamic": {
+        "Desc": "",
+        "Format": "PresentFormat",
+        "Visibility": "Hidden"
+      },
+      "factor": {
+        "Desc": "Integer number to specify the number of smaller arrays which are to be created. This option is only relevant for type 'block' or 'cyclic' partitioning.",
+        "Format": "IntConstExprFormat"
+      },
+      "type": {
+        "Default": "complete",
+        "Desc": "Block partitioning creates smaller arrays from consecutive blocks of the original array. Cyclic partitioning creates smaller arrays by interleaving elements from the original array. Complete partitioning decomposes the array into individual elements. ",
+        "EnumValueList": [
+          "block",
+          "cyclic",
+          "complete"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "array_reshape": {
+    "Desc": "Reshape an array from one with many elements to one with greater word-width. Useful for improving block RAM accesses without using more block RAM.",
+    "Objects": [
+      "Array",
+      "Function"
+    ],
+    "Options": {
+      "block": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type"
+      },
+      "complete": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type"
+      },
+      "cyclic": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type"
+      },
+      "dim": {
+        "Default": 1,
+        "Desc": "This is only relevant for multi-dimensional arrays and specifies which dimension of the array is to be reshaped. If a value of 0 is used, all dimensions will be reshaped with the specified options. Any other value will reshape only the specified dimension.",
+        "Format": "IntConstExprFormat"
+      },
+      "factor": {
+        "Desc": "Integer number to specify the number of temporary smaller arrays which are to be created; Only relevant for type 'block' or 'cyclic' reshaping.",
+        "Format": "IntConstExprFormat"
+      },
+      "object": {
+        "Desc": "This is only relevant for container arrays and applies reshape on the objects within the container. If the option is specified, all dimensions of the objects will be reshaped, but all dimensions of container will be kept.",
+        "Format": "PresentFormat"
+      },
+      "type": {
+        "Default": "complete",
+        "Desc": "Block reshaping creates smaller arrays from consecutive blocks of the original array. Cyclic reshaping creates smaller arrays by interleaving elements from the original array. Complete reshaping decomposes the array into temporary individual elements and then recombines them into an array with a wider word.",
+        "EnumValueList": [
+          "block",
+          "cyclic",
+          "complete"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "array_stencil": {
+    "Desc": "Generates line buffer and sliding window for 1D/2D maxi interface variable with stencil access pattern and enables burst.",
+    "Objects": [
+      "Array",
+      "Parameter"
+    ],
+    "Options": {
+      "off": {
+        "Desc": "If present, auto array_stencil will not take place on the variable in the loop where the pragma is placed.",
+        "Format": "PresentFormat"
+      },
+      "variable": {
+        "Desc": "Specify the specific variable to consider for the array_stencil directive.",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Hidden"
+  },
+  "axis_interface": {
+    "Desc": "axis interface",
+    "Objects": [
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "both": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "register_mode"
+      },
+      "depth": {
+        "Desc": "Specifies the maximum number of samples for the test bench to process. This is required for pointer interfaces using ap_fifo mode.",
+        "Format": "IntConstExprFormat"
+      },
+      "forward": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "register_mode"
+      },
+      "off": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "register_mode"
+      },
+      "register": {
+        "Desc": "Registers the signal and any relevant protocol signals and instructs the signals to persist until at least the last cycle of the function execution",
+        "Format": "PresentFormat"
+      },
+      "register_mode": {
+        "Default": "",
+        "Desc": "For axis, specifies if port registers are placed on the forward path (TDATA and TVALID), the reverse path (TREADY), both forward and reverse, or off (no port registers).",
+        "EnumValueList": [
+          "forward",
+          "reverse",
+          "off",
+          "both"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "reverse": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "register_mode"
+      }
+    },
+    "ParentPragma": "interface",
+    "Visibility": "Public"
+  },
+  "bind_op": {
+    "Desc": "Define a specific implementation and latency for an operation in the RTL",
+    "Objects": [
+      "Array",
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "impl": {
+        "Desc": "Specify the implementation style for the operator",
+        "Format": "IDExprFormat"
+      },
+      "latency": {
+        "Desc": "Specify the latency the operator",
+        "Format": "IntConstExprFormat"
+      },
+      "op": {
+        "Desc": "Specify the operator type",
+        "Format": "IDExprFormat",
+        "Optional": false
+      },
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "bind_storage": {
+    "Desc": "Define a specific implementation and latency for a storage element, or memory, in the RTL",
+    "Objects": [
+      "Array",
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "impl": {
+        "Desc": "Specify the implementation style for the storage",
+        "Format": "IDExprFormat"
+      },
+      "latency": {
+        "Desc": "Specify the latency for the storage",
+        "Format": "IntConstExprFormat"
+      },
+      "type": {
+        "Desc": "Specify the storage type",
+        "Format": "IDExprFormat",
+        "Optional": false
+      },
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "cache": {
+    "Desc": "cache",
+    "Objects": [
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "burst": {
+        "Default": "",
+        "Desc": "HLS burst mode",
+        "EnumValueList": [
+          "off",
+          "on"
+        ],
+        "Format": "EnumExprFormat",
+        "Visibility": "Hidden"
+      },
+      "depth": {
+        "Desc": "Line size in words",
+        "Format": "IntConstExprFormat"
+      },
+      "lines": {
+        "Desc": "Number of cache lines",
+        "Format": "IntConstExprFormat"
+      },
+      "port": {
+        "Desc": "Specify the interface for which cache is used.",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      },
+      "users": {
+        "Desc": "Number of port users",
+        "Format": "IntConstExprFormat",
+        "Visibility": "Hidden"
+      },
+      "ways": {
+        "Desc": "cache ways",
+        "Format": "IntConstExprFormat",
+        "Visibility": "Hidden"
+      },
+      "write_mode": {
+        "Default": "",
+        "Desc": "Write mode",
+        "EnumValueList": [
+          "write_back",
+          "write_through"
+        ],
+        "Format": "EnumExprFormat",
+        "Visibility": "Hidden"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "data_pack": {
+    "Desc": "",
+    "Objects": [
+      "Struct"
+    ],
+    "Options": {
+      "byte_pad": {
+        "Default": "",
+        "Desc": "",
+        "EnumValueList": [
+          "struct_level",
+          "field_level"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "field_level": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "byte_pad"
+      },
+      "instance": {
+        "Desc": "",
+        "Format": "IDExprFormat"
+      },
+      "struct_level": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "byte_pad"
+      },
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Hidden"
+  },
+  "dataflow": {
+    "Desc": "Enables task level pipelining, allowing functions and loops to execute concurrently. Used to optimize throughput and/or latency.",
+    "Objects": [
+      "Function",
+      "Loop",
+      "Region"
+    ],
+    "Options": {
+      "disable_start_propagation": {
+        "Desc": "Disable the start propagation control layer that is added to control when each process inside a dataflow region can start.",
+        "Format": "PresentFormat"
+      },
+      "interval": {
+        "Desc": "",
+        "Format": "PresentFormat",
+        "Visibility": "Hidden"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "dependence": {
+    "Desc": "Used to provide additional information that can overcome loop-carried dependencies and allow loops to be pipelined (or pipelined with lower intervals)",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "array": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "class"
+      },
+      "class": {
+        "Default": "",
+        "Desc": "Specify a class of variables where the dependence need clarification. This is mutually exclusive with the -variable option.",
+        "EnumValueList": [
+          "array",
+          "pointer"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "cross_variables": {
+        "Desc": "",
+        "Format": "VariableExprFormat"
+      },
+      "dependent": {
+        "Default": "false",
+        "Desc": "Specify if a dependence needs to be enforced (true) or removed (false).",
+        "EnumValueList": [
+          "true",
+          "false"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "direction": {
+        "Default": "",
+        "Desc": "Specify the direction for a dependence, this is only relevant for loop-carry dependencies. RAW is Read-After-Write, WAR is Write-After-Read, WAW is Write-After-Write",
+        "EnumValueList": [
+          "raw",
+          "war",
+          "waw"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "distance": {
+        "Desc": "Specify the inter-iteration distance for array access as a positive integer value. This is only relevant for loop-carry dependencies where the -dependent option is set to true.",
+        "Format": "IntConstExprFormat"
+      },
+      "false": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "dependent"
+      },
+      "inter": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type"
+      },
+      "intra": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type"
+      },
+      "pointer": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "class"
+      },
+      "raw": {
+        "Desc": "RAW is Read-After-Write",
+        "Format": "EnumPresentFormat",
+        "ParentName": "direction"
+      },
+      "true": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "dependent"
+      },
+      "type": {
+        "Default": "inter",
+        "Desc": "Specify if the dependence is within the same loop iteration (intra) or between different loop iterations (inter).",
+        "EnumValueList": [
+          "intra",
+          "inter"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "variable": {
+        "Desc": "Specify the specific variable to consider for the dependence directive; This is mutually exclusive with the -class option.",
+        "Format": "VariableExprFormat"
+      },
+      "war": {
+        "Desc": "WAR is Write-After-Read",
+        "Format": "EnumPresentFormat",
+        "ParentName": "direction"
+      },
+      "waw": {
+        "Desc": "WAW is Write-After-Write",
+        "Format": "EnumPresentFormat",
+        "ParentName": "direction"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "disaggregate": {
+    "Desc": "Break a struct down into its individual elements.",
+    "Objects": [
+      "Struct",
+      "Array"
+    ],
+    "Options": {
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "expression_balance": {
+    "Desc": "Allows automatic expression balancing to be turned off",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "off": {
+        "Desc": "Turn off expression balancing",
+        "Format": "PresentFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "function_allocation": {
+    "Desc": "function allocation",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "instances": {
+        "Desc": "A function or operator. The function can be any function in the original C code which has not been inlined. Valid operators are: add sub mul icmp sdiv udiv srem urem lshr ashr shl fadd fsub fmul fdiv dadd dsub dmul ddiv fcmp frem fsqrt frsqrt frecip dsqrt drecip dcmp drsqrt flog dlog fexp dexp",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "ParentPragma": "allocation",
+    "Visibility": "Public"
+  },
+  "function_instantiate": {
+    "Desc": "",
+    "Objects": [
+      "Function"
+    ],
+    "Options": {
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "inline": {
+    "Desc": "Inlines a function, removing function hierarchy at this level.",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "all": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type",
+        "Visibility": "Hidden"
+      },
+      "off": {
+        "Desc": "This disables function inlining and is used to prevent particular functions from being inlined.",
+        "Format": "PresentFormat"
+      },
+      "recursive": {
+        "Desc": "By default only one level of function inlining is performed. The -recursive option inlines all functions recursively down the hierarchy.",
+        "Format": "PresentFormat"
+      },
+      "region": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type",
+        "Visibility": "Hidden"
+      },
+      "self": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type",
+        "Visibility": "Hidden"
+      },
+      "type": {
+        "Default": "",
+        "Desc": "",
+        "EnumValueList": [
+          "self",
+          "all",
+          "region"
+        ],
+        "Format": "EnumExprFormat",
+        "Visibility": "Hidden"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "interface": {
+    "ChildList": [
+      "maxi_interface",
+      "axis_interface",
+      "s_axilite",
+      "memory",
+      "memory",
+      "ap_scalar",
+      "ap_scalar",
+      "ap_scalar",
+      "ap_scalar",
+      "ap_scalar",
+      "ap_scalar",
+      "ap_stable",
+      "ap_stable",
+      "ap_stable",
+      "ap_stable",
+      "ap_stable"
+    ],
+    "ChildSelectOptionName": "mode",
+    "Desc": "Specifies how RTL ports are created from the function description.",
+    "Objects": [
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "ap_ack": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "ap_bus": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode",
+        "Visibility": "Deprecated"
+      },
+      "ap_ctrl_chain": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "ap_ctrl_hs": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "ap_ctrl_none": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "ap_fifo": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "ap_hs": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "ap_memory": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "ap_none": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "ap_ovld": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "ap_stable": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "ap_vld": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "axis": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "both": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "register_mode"
+      },
+      "bram": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "bundle": {
+        "Desc": "Specify a name for an AXI interface. Used to group multiple arguments into the same interface bundle.",
+        "Format": "IDExprFormat"
+      },
+      "channel": {
+        "Desc": "For multi-channel m_axi, specify the channel ID.",
+        "Format": "IntConstExprFormat"
+      },
+      "clock": {
+        "Desc": "Specify a separate clock for an s_axilite interface",
+        "Format": "IDExprFormat"
+      },
+      "depth": {
+        "Desc": "Specifies the maximum number of samples for the test bench to process. This is required for pointer interfaces using ap_fifo mode.",
+        "Format": "IntConstExprFormat"
+      },
+      "forward": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "register_mode"
+      },
+      "interrupt": {
+        "Desc": "Only used by ap_vld/ap_hs. This option enables the I/O to be managed in interrupt, by creating the corresponding bits in the ISR and IER SAXILite file. Value N=16..31 specifies the bit position in both registers (by default assigned contiguously from 16)",
+        "Format": "IntConstExprFormat"
+      },
+      "latency": {
+        "Desc": "Specify the latency for ap_memory and m_axi interfaces",
+        "Format": "IntConstExprFormat"
+      },
+      "m_axi": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "max_read_burst_length": {
+        "Desc": "For m_axi, specify the maximum number of data values read during a burst transfer.",
+        "Format": "IntConstExprFormat"
+      },
+      "max_widen_bitwidth": {
+        "Desc": "For m_axi, specify the maximum burst bitwidth that Vitis HLS will use when automatically widening (must be a power-of-two).",
+        "Format": "IntConstExprFormat"
+      },
+      "max_write_burst_length": {
+        "Desc": "For m_axi, specify the maximum number of data values written during a burst transfer.",
+        "Format": "IntConstExprFormat"
+      },
+      "mode": {
+        "Default": "",
+        "Desc": "Specify the interface I/O protocol",
+        "EnumValueList": [
+          "ap_none",
+          "ap_vld",
+          "ap_ack",
+          "ap_hs",
+          "ap_ovld",
+          "ap_fifo",
+          "ap_memory",
+          "bram",
+          "axis",
+          "s_axilite",
+          "m_axi",
+          "ap_ctrl_none",
+          "ap_ctrl_hs",
+          "ap_ctrl_chain",
+          "ap_stable"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "name": {
+        "Desc": "Specify name of interface in RTL",
+        "Format": "IDExprFormat"
+      },
+      "num_read_outstanding": {
+        "Desc": "For m_axi, specify how many read requests can be made to the bus, without a response, before the design stalls",
+        "Format": "IntConstExprFormat"
+      },
+      "num_write_outstanding": {
+        "Desc": "For m_axi, specify how many write requests can be made to the bus, without a response, before the design stalls",
+        "Format": "IntConstExprFormat"
+      },
+      "off": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "register_mode"
+      },
+      "offset": {
+        "Desc": "For m_axi and s_axilite, specify how the the address offset will be implemented",
+        "Format": "IDExprFormat"
+      },
+      "port": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      },
+      "register": {
+        "Desc": "Registers the signal and any relevant protocol signals and instructs the signals to persist until at least the last cycle of the function execution",
+        "Format": "PresentFormat"
+      },
+      "register_mode": {
+        "Default": "",
+        "Desc": "For axis, specifies if port registers are placed on the forward path (TDATA and TVALID), the reverse path (TREADY), both forward and reverse, or off (no port registers).",
+        "EnumValueList": [
+          "forward",
+          "reverse",
+          "off",
+          "both"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "reverse": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "register_mode"
+      },
+      "s_axilite": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "storage_impl": {
+        "Desc": "For s_axilite, specify the storage implementation to use.",
+        "Format": "IDExprFormat"
+      },
+      "storage_type": {
+        "Desc": "For bram and ap_memory, specify the type of storage to use.",
+        "Format": "IDExprFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "latency": {
+    "Desc": "Allows a minimum and/or maximum latency constraint to be specified",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "max": {
+        "Desc": "",
+        "Format": "IntConstExprFormat"
+      },
+      "min": {
+        "Desc": "",
+        "Format": "IntConstExprFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "loop_flatten": {
+    "Desc": "Allows nested loops to be collapsed into a single loop with improved latency",
+    "Objects": [
+      "Loop"
+    ],
+    "Options": {
+      "off": {
+        "Desc": "This option prevents flattening from taking place. This can be used to prevent some loops from being flattened while all others in the specified location are flattened.",
+        "Format": "PresentFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "loop_merge": {
+    "Desc": "Merge consecutive loops to reduce overall latency, increase sharing and improve logic optimization",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "force": {
+        "Desc": "This option forces loops to be merged even when Vitis HLS issues a warning. In this case the user takes responsibility that the merged loop will function correctly.",
+        "Format": "PresentFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "loop_tripcount": {
+    "Desc": "Used for loops which have variables bounds to provide an estimate for the loop iteration count. This has no impact on synthesis, only on reporting.",
+    "Objects": [
+      "Loop"
+    ],
+    "Options": {
+      "avg": {
+        "Desc": "Specify the average loop tripcount",
+        "Format": "IntConstExprFormat"
+      },
+      "max": {
+        "Desc": "Specify the maximum loop tripcount",
+        "Format": "IntConstExprFormat",
+        "Optional": false
+      },
+      "min": {
+        "Desc": "Specify the minimum loop tripcount",
+        "Format": "IntConstExprFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "maxi_interface": {
+    "Desc": "maxi interface",
+    "Objects": [
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "bundle": {
+        "Desc": "Specify a name for an AXI interface. Used to group multiple arguments into the same interface bundle.",
+        "Format": "IDExprFormat"
+      },
+      "channel": {
+        "Desc": "For multi-channel m_axi, specify the channel ID.",
+        "Format": "IntConstExprFormat"
+      },
+      "depth": {
+        "Desc": "Specifies the maximum number of samples for the test bench to process. This is required for pointer interfaces using ap_fifo mode.",
+        "Format": "IntConstExprFormat"
+      },
+      "latency": {
+        "Desc": "Specify the latency for ap_memory and m_axi interfaces",
+        "Format": "IntConstExprFormat"
+      },
+      "max_read_burst_length": {
+        "Desc": "For m_axi, specify the maximum number of data values read during a burst transfer.",
+        "Format": "IntConstExprFormat"
+      },
+      "max_widen_bitwidth": {
+        "Desc": "For m_axi, specify the maximum burst bitwidth that Vitis HLS will use when automatically widening (must be a power-of-two).",
+        "Format": "IntConstExprFormat"
+      },
+      "max_write_burst_length": {
+        "Desc": "For m_axi, specify the maximum number of data values written during a burst transfer.",
+        "Format": "IntConstExprFormat"
+      },
+      "num_read_outstanding": {
+        "Desc": "For m_axi, specify how many read requests can be made to the bus, without a response, before the design stalls",
+        "Format": "IntConstExprFormat"
+      },
+      "num_write_outstanding": {
+        "Desc": "For m_axi, specify how many write requests can be made to the bus, without a response, before the design stalls",
+        "Format": "IntConstExprFormat"
+      },
+      "offset": {
+        "Desc": "For m_axi and s_axilite, specify how the the address offset will be implemented",
+        "Format": "IDExprFormat"
+      }
+    },
+    "ParentPragma": "interface",
+    "Visibility": "Public"
+  },
+  "memory": {
+    "Desc": "bram/ap_memory interface",
+    "Objects": [
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "depth": {
+        "Desc": "Specifies the maximum number of samples for the test bench to process. This is required for pointer interfaces using ap_fifo mode.",
+        "Format": "IntConstExprFormat"
+      },
+      "latency": {
+        "Desc": "Specify the latency for ap_memory and m_axi interfaces",
+        "Format": "IntConstExprFormat"
+      },
+      "storage_type": {
+        "Desc": "For bram and ap_memory, specify the type of storage to use.",
+        "Format": "IDExprFormat"
+      }
+    },
+    "ParentPragma": "interface",
+    "Visibility": "Public"
+  },
+  "occurrence": {
+    "Desc": "Used when pipelining functions or loops, to specify that the code in a location is executed at a lesser rate than the code in the enclosing function or loop",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "cycle": {
+        "Desc": "Specify the occurrence N/M, where N is the number of times the enclosing function or loop is executed and M is the number of times the conditional region is executed. N must be an integer multiple of M.",
+        "Format": "IntConstExprFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "operation_allocation": {
+    "Desc": "operation allocation",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "instances": {
+        "Desc": "A function or operator. The function can be any function in the original C code which has not been inlined. Valid operators are: add sub mul icmp sdiv udiv srem urem lshr ashr shl fadd fsub fmul fdiv dadd dsub dmul ddiv fcmp frem fsqrt frsqrt frecip dsqrt drecip dcmp drsqrt flog dlog fexp dexp",
+        "Format": "IDExprFormat",
+        "Optional": false
+      }
+    },
+    "ParentPragma": "allocation",
+    "Visibility": "Public"
+  },
+  "performance": {
+    "Desc": "Allows a single pragma to parallelize a loop nests based on a performance target, and can be accomplished by internally applying pipeline, unroll, and array partition pragmas to the associated loops/arrays.",
+    "Objects": [
+      "Loop",
+      "Region"
+    ],
+    "Options": {
+      "assume_ti": {
+        "Default": "0.0",
+        "Desc": "",
+        "Format": "DoubleConstExprFormat",
+        "Visibility": "Hidden"
+      },
+      "assume_tl": {
+        "Default": "0.0",
+        "Desc": "",
+        "Format": "DoubleConstExprFormat",
+        "Visibility": "Hidden"
+      },
+      "scope": {
+        "Default": "",
+        "Desc": "",
+        "EnumValueList": [
+          "loop",
+          "region"
+        ],
+        "Format": "EnumExprFormat",
+        "Visibility": "Hidden"
+      },
+      "target_ti": {
+        "Default": "0.0",
+        "Desc": "Specify the value of transaction interval that is targeted for the scope.",
+        "Format": "DoubleConstExprFormat"
+      },
+      "target_tl": {
+        "Default": "0.0",
+        "Desc": "Specify the value of transaction latency that is targeted for the scope.",
+        "Format": "DoubleConstExprFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "pipeline": {
+    "Desc": "Reduces the initiation interval by allowing overlapped execution of operations within a loop or function",
+    "Objects": [
+      "Function",
+      "Loop"
+    ],
+    "Options": {
+      "enable_flush": {
+        "Desc": "Use style=flp instead",
+        "Format": "PresentFormat",
+        "Visibility": "Deprecated"
+      },
+      "ii": {
+        "Desc": "A positive integer value specifying the desired initiation interval for the pipeline.",
+        "Format": "IntConstExprFormat"
+      },
+      "off": {
+        "Desc": "Disable loop pipelining for a loop that is automatically pipelined via 'config_compile -pipeline_loops'.",
+        "Format": "PresentFormat"
+      },
+      "rewind": {
+        "Desc": "This enables a rewinding architecture for loop pipelines, which has continuous pipelining with no pause between one loop iteration ending and the next one starting.",
+        "Format": "PresentFormat"
+      },
+      "style": {
+        "Default": "",
+        "Desc": "Specify the pipeline implementation style",
+        "EnumValueList": [
+          "stp",
+          "flp",
+          "frp"
+        ],
+        "Format": "EnumExprFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "protocol": {
+    "Desc": "Specify a region of code as a 'protocol' region where no clock operations will be inserted by Vitis HLS unless explicitly specified in the code",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "fixed": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "floating": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "mode"
+      },
+      "mode": {
+        "Default": "floating",
+        "Desc": "Floating mode allows code from outside the protocol region to overlap with the region execution (other operations may be concurrent to the region).  Fixed mode ensures there is no overlap.",
+        "EnumValueList": [
+          "fixed",
+          "floating"
+        ],
+        "Format": "EnumExprFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "realprobe": {
+    "Desc": "Masking a function for realprobe, removing function hierarchy at this level.",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "all": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type",
+        "Visibility": "Hidden"
+      },
+      "off": {
+        "Desc": "This disables function inlining and is used to prevent particular functions from being inlined.",
+        "Format": "PresentFormat"
+      },
+      "recursive": {
+        "Desc": "By default only one level of function inlining is performed. The -recursive option inlines all functions recursively down the hierarchy.",
+        "Format": "PresentFormat"
+      },
+      "region": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type",
+        "Visibility": "Hidden"
+      },
+      "self": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type",
+        "Visibility": "Hidden"
+      },
+      "type": {
+        "Default": "",
+        "Desc": "",
+        "EnumValueList": [
+          "self",
+          "all",
+          "region"
+        ],
+        "Format": "EnumExprFormat",
+        "Visibility": "Hidden"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "reset": {
+    "Desc": "This command can be used to add or remove reset for specific state variables (global or static)",
+    "Objects": [
+      "Static"
+    ],
+    "Options": {
+      "off": {
+        "Desc": "If present, reset will not be generated for the specified variable. On the other hand, without the option, reset will be generated for the specified variable.",
+        "Format": "PresentFormat"
+      },
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "resource": {
+    "Desc": "",
+    "Objects": [
+      "Array",
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "auto": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "memory_style"
+      },
+      "block": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "memory_style"
+      },
+      "core": {
+        "Desc": "",
+        "Format": "IDExprFormat",
+        "Optional": false,
+        "Visibility": "Deprecated"
+      },
+      "distribute": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "memory_style"
+      },
+      "ecc_mode": {
+        "Default": "",
+        "Desc": "",
+        "EnumValueList": [
+          "none",
+          "encode",
+          "decode",
+          "both"
+        ],
+        "Format": "EnumExprFormat",
+        "Visibility": "Hidden"
+      },
+      "latency": {
+        "Desc": "",
+        "Format": "IntConstExprFormat",
+        "Visibility": "Deprecated"
+      },
+      "memory_style": {
+        "Default": "",
+        "Desc": "",
+        "EnumValueList": [
+          "auto",
+          "distribute",
+          "block",
+          "uram"
+        ],
+        "Format": "EnumExprFormat",
+        "Visibility": "Deprecated"
+      },
+      "metadata": {
+        "Desc": "",
+        "Format": "IDExprFormat",
+        "Visibility": "Deprecated"
+      },
+      "uram": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "memory_style"
+      },
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Deprecated"
+  },
+  "s_axilite": {
+    "Desc": "s_axilite interface pragma",
+    "Objects": [
+      "Parameter",
+      "Function"
+    ],
+    "Options": {
+      "bundle": {
+        "Desc": "Specify a name for an AXI interface. Used to group multiple arguments into the same interface bundle.",
+        "Format": "IDExprFormat"
+      },
+      "clock": {
+        "Desc": "Specify a separate clock for an s_axilite interface",
+        "Format": "IDExprFormat"
+      },
+      "offset": {
+        "Desc": "For m_axi and s_axilite, specify how the the address offset will be implemented",
+        "Format": "IntConstExprFormat"
+      },
+      "storage_impl": {
+        "Desc": "For s_axilite, specify the storage implementation to use.",
+        "Format": "IDExprFormat"
+      }
+    },
+    "ParentPragma": "interface",
+    "Visibility": "Public"
+  },
+  "shared": {
+    "Desc": "Specifies that a global variable, or function argument array is shared among multiple dataflow processes, without the need for synchronization.",
+    "Objects": [
+      "Parameter",
+      "Array",
+      "Function"
+    ],
+    "Options": {
+      "variable": {
+        "Desc": "Replace set_directive_shared with 'set_directive_stream type=shared'",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Deprecated"
+  },
+  "stable": {
+    "Desc": "Indicates that a variable input or output of a dataflow region can be ignored when generating the synchronizations at entry and exit of the dataflow region.",
+    "Objects": [
+      "Parameter",
+      "Array",
+      "Function"
+    ],
+    "Options": {
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "stable_content": {
+    "Desc": "",
+    "Objects": [
+      "Parameter",
+      "Array",
+      "Function"
+    ],
+    "Options": {
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Hidden"
+  },
+  "stream": {
+    "Desc": "Specifies that a specific array is to be implemented as a FIFO or RAM memory channel during dataflow optimization.",
+    "Objects": [
+      "Parameter",
+      "Array",
+      "Function"
+    ],
+    "Options": {
+      "depth": {
+        "Desc": "This option can be used to specified the RTL FIFO depth of a stream object of array type or hls::stream type.",
+        "Format": "IntConstExprFormat"
+      },
+      "dim": {
+        "Desc": "dimension",
+        "Format": "IntConstExprFormat",
+        "Visibility": "Deprecated"
+      },
+      "off": {
+        "Desc": "Replace 'off' with 'type=pipo'",
+        "Format": "PresentFormat",
+        "Visibility": "Deprecated"
+      },
+      "type": {
+        "Default": "",
+        "Desc": "Specify type of fifo or pipo",
+        "EnumValueList": [
+          "fifo",
+          "pipo",
+          "shared",
+          "unsync"
+        ],
+        "Format": "EnumExprFormat"
+      },
+      "variable": {
+        "Desc": "",
+        "Format": "VariableExprFormat",
+        "Optional": false
+      }
+    },
+    "Visibility": "Public"
+  },
+  "top": {
+    "Desc": "This directive attaches a name to a function, which can then be used with the set_top command.",
+    "Objects": [
+      "Function"
+    ],
+    "Options": {
+      "name": {
+        "Desc": "Specify the name to be used by the set_top command.",
+        "Format": "IDExprFormat"
+      }
+    },
+    "Visibility": "Public"
+  },
+  "unroll": {
+    "Desc": "Transform loops to create multiple instances of the loop body and its instructions that can then be scheduled independently",
+    "Objects": [
+      "Region"
+    ],
+    "Options": {
+      "complete": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type",
+        "Visibility": "Hidden"
+      },
+      "factor": {
+        "Desc": "Non-zero integer indicating that partial unrolling is requested. The loop body will be repeated this number of times, and the iteration information will be adjusted accordingly.",
+        "Format": "IntConstExprFormat"
+      },
+      "partial": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type",
+        "Visibility": "Hidden"
+      },
+      "region": {
+        "Desc": "",
+        "Format": "EnumPresentFormat",
+        "ParentName": "type",
+        "Visibility": "Hidden"
+      },
+      "skip_exit_check": {
+        "Desc": "For partial unrolling, remove exit check logic if possible",
+        "Format": "PresentFormat"
+      },
+      "type": {
+        "Default": "",
+        "Desc": "",
+        "EnumValueList": [
+          "partial",
+          "complete",
+          "region"
+        ],
+        "Format": "EnumExprFormat",
+        "Visibility": "Hidden"
+      }
+    },
+    "Visibility": "Public"
+  }
+}
