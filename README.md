@@ -1,6 +1,6 @@
 # RealProbe🔍
 <div>
-  <p align="center"> On-FPGA profiling tool for HLS designs </p>
+  <p align="center"> **On-FPGA profiling tool for HLS designs** </p>
 </div>
 
 ## About
@@ -13,14 +13,18 @@ It is developed and maintained by [Jiho Kim][1] from [Sharc Lab][2] at [Georgia 
 [2]: https://sharclab.ece.gatech.edu/
 [3]: https://www.gatech.edu/
 
+
+
 ## Useful Links
 
 [Documentation][9]
 
 Tutorials ([FCCM 2024][10])
 
-[9]: https://sharclab.ece.gatech.edu/open-source-projects/
-[10]: https://realprobe-doc.readthedocs.io/en/latest
+[9]: https://realprobe-doc.readthedocs.io/en/latest
+[10]: https://sharclab.ece.gatech.edu/open-source-projects/
+
+
 
 ## Requirements
 
@@ -37,6 +41,8 @@ All testing has been performed using Vitis HLS 2023.1 and Vivado 2023.1, though 
 [6]: https://docs.xilinx.com/r/en-US/ug1399-vitis-hls/Setting-Up-the-Environment?tocId=5N~0A2HNuVzvrGYgw0ja_A
 [7]: https://docs.amd.com/r/en-US/ug910-vivado-getting-started/Installing-the-Vivado-Design-Suite
 [8]: https://github.com/Xilinx/hls-llvm-project
+
+
 
 ## Usage
 
