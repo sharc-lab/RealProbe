@@ -1,0 +1,6 @@
+./include/clang/Basic/XlxPragmaOption.td:350:// #pragma HLS RealProbe [self | region | all] [recursive] [off]
+./include/clang/Basic/XlxPragmaOption.td:352:    let Name = "realprobe";
+./include/clang/Basic/XlxPragmaOption.td:353:    let Desc = "Masking a function for realprobe, removing function hierarchy at this level."; 
+./lib/CodeGen/CodeGenAction.cpp:204:    //                                  "LLVM IR generation of RealProbe function");
+./lib/CodeGen/CGXlxAttr.cpp:2135:        << "realprobe" ;
+./lib/Parse/ParseXlxPragma.cpp:3808:          .CaseLower("realprobe", HandleRealProbePragma)
