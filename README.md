@@ -1,5 +1,5 @@
+# RealProbe🔍
 <div>
-  <h1 align="center"> :mag: RealProbe </h1>
   <p align="center"> On-FPGA profiling tool for HLS designs </p>
 </div>
 
@@ -7,7 +7,7 @@
 
 RealProbe is a fully-automated profiling tool to extract on-FPGA performance. 
 With just one line---#pragma HLS RealProbe---our tool automatically generates all the code necessary to profile the exact cycle counts of an entire function hierarchy on-board. 
-It is developed and maintained by [Rishov Sarkar][1] from [Sharc Lab][2] at [Georgia Tech][3].
+It is developed and maintained by [Jiho Kim][1] from [Sharc Lab][2] at [Georgia Tech][3].
 
 [1]: https://jihoray.github.io/
 [2]: https://sharclab.ece.gatech.edu/
