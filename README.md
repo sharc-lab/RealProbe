@@ -1,7 +1,6 @@
 # RealProbe🔍
-<div>
-  <p align="center"> **On-FPGA profiling tool for HLS designs** </p>
-</div>
+**On-FPGA profiling tool for HLS designs**
+
 
 ## About
 
@@ -76,4 +75,7 @@ make realprobe
 
 <!---
 All available command-line options can be viewed by running `realprobe --help`.
+<div>
+  <p align="center"> **On-FPGA profiling tool for HLS designs** </p>
+</div>
 -->
