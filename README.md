@@ -3,7 +3,7 @@
   <p align="center"> On-FPGA profiling tool for HLS designs </p>
 </div>
 
-## About RealProbe
+## About
 
 RealProbe is a fully-automated profiling tool to extract on-FPGA performance. 
 With just one line---#pragma HLS RealProbe---our tool automatically generates all the code necessary to profile the exact cycle counts of an entire function hierarchy on-board. 
@@ -16,13 +16,16 @@ It is developed and maintained by [Jiho Kim][1] from [Sharc Lab][2] at [Georgia 
 ## Useful Links
 
 [Documentation][9]
+
 Tutorials ([FCCM 2024][10])
+
 [9]: https://sharclab.ece.gatech.edu/open-source-projects/
 [10]: https://realprobe-doc.readthedocs.io/en/latest
 
 ## System requirements
 
 RealProbe expects AMD/Xilinx Vitis HLS (a part of the [Vitis Unified Software Platform][4]) and [Vivado][5] to be present on the machine it is running on. This includes setting up the environment, as described in the [Vitis HLS documentation][6], and setting up the environment, as described in the [Vivado documentation][7].
+
 For FPGA board, we expect the board to support [PYNQ framework](https://pynq.readthedocs.io/en/latest/). 
 
 Other than that, RealProbe is fully integrated into Vitis HLS and Vivado toolchain, requiring no additional environment settings or tool installations. 
@@ -43,6 +46,7 @@ cd RealProbe
 ```
 
 Go to your project folder (with C/C++ codes and Vitis_HLS run tcl script) and copy the Makefile from RealProbe.
+
 > **Warning**
 >
 > Please note that the name of the tcl script should be hls.tcl, and don't change the variable name inside. For more information, refer examples folder for tcl script examples.
