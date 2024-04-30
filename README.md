@@ -22,7 +22,7 @@ Tutorials ([FCCM 2024][10])
 [9]: https://sharclab.ece.gatech.edu/open-source-projects/
 [10]: https://realprobe-doc.readthedocs.io/en/latest
 
-## System requirements
+## Requirements
 
 RealProbe expects AMD/Xilinx Vitis HLS (a part of the [Vitis Unified Software Platform][4]) and [Vivado][5] to be present on the machine it is running on. This includes setting up the environment, as described in the [Vitis HLS documentation][6], and setting up the environment, as described in the [Vivado documentation][7].
 
