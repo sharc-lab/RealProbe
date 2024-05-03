@@ -43,7 +43,7 @@ set_part $target_device
 create_clock -period 10 -name default
 
 # Compile and runs pre-synthesis C simulation using the provided C test bench
-csim_design -code_analyzer -clean
+csim_design -clean
 
 csynth_design
 export_design -format ip_catalog
