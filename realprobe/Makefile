@@ -1,8 +1,8 @@
 .PHONY: base realprobe clean prebuild function
 
 # Change the path to be absolute path
-REALPROBE_PATH := <ABSOLUTE PATH>/realprobe
-HLS_BUILD_PATH := <ABSOLUTE PATH>/hls-build
+REALPROBE_PATH := $(CURDIR)/../../realprobe
+HLS_BUILD_PATH := $(CURDIR)/../../hls-build
 
 HLS_FILE := hls.tcl
 RP_HLS_FILE := .rp_hls.tcl
