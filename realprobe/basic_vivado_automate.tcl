@@ -137,7 +137,6 @@ return 1
     puts $file "\n"
     puts $file "create_project $prjname . -part {$TARGET_DEV}"
     puts $file "current_project $prjname"
-    puts $file "set_property board_part tul.com.tw:pynq-z2:part0:1.0 \[current_project\]"
     puts $file "create_bd_design \"design_1\""
     puts $file "set_property source_mgmt_mode All \[current_project\]"
 
