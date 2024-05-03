@@ -129,7 +129,7 @@ return 1
     puts $file "make_wrapper -files \[get_files $boardsPynqz2Path/$prjname.srcs/sources_1/bd/design_1/design_1.bd\] -top"
     puts $file "add_files -norecurse $boardsPynqz2Path/$prjname.gen/sources_1/bd/design_1/hdl/design_1_wrapper.v"
     puts $file "reset_runs synth_1"
-    puts $file "launch_runs impl_1 -to_step write_bitstream -jobs 64"
+    puts $file "launch_runs impl_1 -to_step write_bitstream -jobs 4"
     puts $file "wait_on_run impl_1"
     puts $file "close_project"
     puts $file "exit"
