@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../../lib/libclangTidyHICPPModule.a CMakeFiles/clangTidyHICPPModule.dir/ExceptionBaseclassCheck.cpp.o CMakeFiles/clangTidyHICPPModule.dir/NoAssemblerCheck.cpp.o CMakeFiles/clangTidyHICPPModule.dir/HICPPTidyModule.cpp.o CMakeFiles/clangTidyHICPPModule.dir/SignedBitwiseCheck.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../../lib/libclangTidyHICPPModule.a
+/usr/bin/ar qc ../../../../../../lib/libclangTidyHICPPModule.a CMakeFiles/clangTidyHICPPModule.dir/ExceptionBaseclassCheck.cpp.o CMakeFiles/clangTidyHICPPModule.dir/NoAssemblerCheck.cpp.o CMakeFiles/clangTidyHICPPModule.dir/HICPPTidyModule.cpp.o CMakeFiles/clangTidyHICPPModule.dir/SignedBitwiseCheck.cpp.o
+/usr/bin/ranlib ../../../../../../lib/libclangTidyHICPPModule.a

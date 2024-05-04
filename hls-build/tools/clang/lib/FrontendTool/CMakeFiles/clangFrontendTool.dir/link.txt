@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../lib/libclangFrontendTool.a CMakeFiles/clangFrontendTool.dir/ExecuteCompilerInvocation.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../lib/libclangFrontendTool.a
+/usr/bin/ar qc ../../../../lib/libclangFrontendTool.a CMakeFiles/clangFrontendTool.dir/ExecuteCompilerInvocation.cpp.o
+/usr/bin/ranlib ../../../../lib/libclangFrontendTool.a

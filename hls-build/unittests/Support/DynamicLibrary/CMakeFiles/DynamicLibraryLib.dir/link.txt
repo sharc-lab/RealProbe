@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../lib/libDynamicLibraryLib.a CMakeFiles/DynamicLibraryLib.dir/ExportedFuncs.cxx.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../lib/libDynamicLibraryLib.a
+/usr/bin/ar qc ../../../lib/libDynamicLibraryLib.a CMakeFiles/DynamicLibraryLib.dir/ExportedFuncs.cxx.o
+/usr/bin/ranlib ../../../lib/libDynamicLibraryLib.a

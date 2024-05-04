@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../lib/libclangReorderFields.a CMakeFiles/clangReorderFields.dir/ReorderFieldsAction.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../lib/libclangReorderFields.a
+/usr/bin/ar qc ../../../../../lib/libclangReorderFields.a CMakeFiles/clangReorderFields.dir/ReorderFieldsAction.cpp.o
+/usr/bin/ranlib ../../../../../lib/libclangReorderFields.a

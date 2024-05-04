@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../lib/libclangDynamicASTMatchers.a CMakeFiles/clangDynamicASTMatchers.dir/Diagnostics.cpp.o CMakeFiles/clangDynamicASTMatchers.dir/VariantValue.cpp.o CMakeFiles/clangDynamicASTMatchers.dir/Parser.cpp.o CMakeFiles/clangDynamicASTMatchers.dir/Registry.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../lib/libclangDynamicASTMatchers.a
+/usr/bin/ar qc ../../../../../lib/libclangDynamicASTMatchers.a CMakeFiles/clangDynamicASTMatchers.dir/Diagnostics.cpp.o CMakeFiles/clangDynamicASTMatchers.dir/VariantValue.cpp.o CMakeFiles/clangDynamicASTMatchers.dir/Parser.cpp.o CMakeFiles/clangDynamicASTMatchers.dir/Registry.cpp.o
+/usr/bin/ranlib ../../../../../lib/libclangDynamicASTMatchers.a

@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../libLLVMWindowsManifest.a CMakeFiles/LLVMWindowsManifest.dir/WindowsManifestMerger.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../libLLVMWindowsManifest.a
+/usr/bin/ar qc ../libLLVMWindowsManifest.a CMakeFiles/LLVMWindowsManifest.dir/WindowsManifestMerger.cpp.o
+/usr/bin/ranlib ../libLLVMWindowsManifest.a

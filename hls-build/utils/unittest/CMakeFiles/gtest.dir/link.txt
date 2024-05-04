@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../lib/libgtest.a "CMakeFiles/gtest.dir/googletest/src/gtest-all.cc.o" "CMakeFiles/gtest.dir/googlemock/src/gmock-all.cc.o"
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../lib/libgtest.a
+/usr/bin/ar qc ../../lib/libgtest.a "CMakeFiles/gtest.dir/googletest/src/gtest-all.cc.o" "CMakeFiles/gtest.dir/googlemock/src/gmock-all.cc.o"
+/usr/bin/ranlib ../../lib/libgtest.a

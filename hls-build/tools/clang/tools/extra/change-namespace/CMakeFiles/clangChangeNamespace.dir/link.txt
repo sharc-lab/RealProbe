@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../lib/libclangChangeNamespace.a CMakeFiles/clangChangeNamespace.dir/ChangeNamespace.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../lib/libclangChangeNamespace.a
+/usr/bin/ar qc ../../../../../lib/libclangChangeNamespace.a CMakeFiles/clangChangeNamespace.dir/ChangeNamespace.cpp.o
+/usr/bin/ranlib ../../../../../lib/libclangChangeNamespace.a

@@ -272,7 +272,7 @@
 #define HAVE_U_INT64_T 1
 
 /* Define to 1 if you have the <valgrind/valgrind.h> header file. */
-/* #undef HAVE_VALGRIND_VALGRIND_H */
+#define HAVE_VALGRIND_VALGRIND_H 1
 
 /* Define to 1 if you have the `writev' function. */
 #define HAVE_WRITEV 1

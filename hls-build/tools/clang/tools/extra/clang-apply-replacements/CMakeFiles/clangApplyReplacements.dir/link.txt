@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../lib/libclangApplyReplacements.a CMakeFiles/clangApplyReplacements.dir/lib/Tooling/ApplyReplacements.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../lib/libclangApplyReplacements.a
+/usr/bin/ar qc ../../../../../lib/libclangApplyReplacements.a CMakeFiles/clangApplyReplacements.dir/lib/Tooling/ApplyReplacements.cpp.o
+/usr/bin/ranlib ../../../../../lib/libclangApplyReplacements.a

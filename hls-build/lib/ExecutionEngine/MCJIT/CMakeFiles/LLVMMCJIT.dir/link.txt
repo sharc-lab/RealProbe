@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../libLLVMMCJIT.a CMakeFiles/LLVMMCJIT.dir/MCJIT.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../libLLVMMCJIT.a
+/usr/bin/ar qc ../../libLLVMMCJIT.a CMakeFiles/LLVMMCJIT.dir/MCJIT.cpp.o
+/usr/bin/ranlib ../../libLLVMMCJIT.a

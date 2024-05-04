@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../lib/libclangToolingASTDiff.a CMakeFiles/clangToolingASTDiff.dir/ASTDiff.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../lib/libclangToolingASTDiff.a
+/usr/bin/ar qc ../../../../../lib/libclangToolingASTDiff.a CMakeFiles/clangToolingASTDiff.dir/ASTDiff.cpp.o
+/usr/bin/ranlib ../../../../../lib/libclangToolingASTDiff.a

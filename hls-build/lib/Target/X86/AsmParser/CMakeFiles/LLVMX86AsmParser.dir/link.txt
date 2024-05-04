@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../libLLVMX86AsmParser.a CMakeFiles/LLVMX86AsmParser.dir/X86AsmInstrumentation.cpp.o CMakeFiles/LLVMX86AsmParser.dir/X86AsmParser.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../libLLVMX86AsmParser.a
+/usr/bin/ar qc ../../../libLLVMX86AsmParser.a CMakeFiles/LLVMX86AsmParser.dir/X86AsmInstrumentation.cpp.o CMakeFiles/LLVMX86AsmParser.dir/X86AsmParser.cpp.o
+/usr/bin/ranlib ../../../libLLVMX86AsmParser.a

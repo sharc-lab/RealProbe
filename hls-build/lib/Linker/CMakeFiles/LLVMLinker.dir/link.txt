@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../libLLVMLinker.a CMakeFiles/LLVMLinker.dir/IRMover.cpp.o CMakeFiles/LLVMLinker.dir/LinkModules.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../libLLVMLinker.a
+/usr/bin/ar qc ../libLLVMLinker.a CMakeFiles/LLVMLinker.dir/IRMover.cpp.o CMakeFiles/LLVMLinker.dir/LinkModules.cpp.o
+/usr/bin/ranlib ../libLLVMLinker.a

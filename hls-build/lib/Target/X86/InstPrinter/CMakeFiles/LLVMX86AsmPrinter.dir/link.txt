@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../libLLVMX86AsmPrinter.a CMakeFiles/LLVMX86AsmPrinter.dir/X86ATTInstPrinter.cpp.o CMakeFiles/LLVMX86AsmPrinter.dir/X86IntelInstPrinter.cpp.o CMakeFiles/LLVMX86AsmPrinter.dir/X86InstComments.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../libLLVMX86AsmPrinter.a
+/usr/bin/ar qc ../../../libLLVMX86AsmPrinter.a CMakeFiles/LLVMX86AsmPrinter.dir/X86ATTInstPrinter.cpp.o CMakeFiles/LLVMX86AsmPrinter.dir/X86IntelInstPrinter.cpp.o CMakeFiles/LLVMX86AsmPrinter.dir/X86InstComments.cpp.o
+/usr/bin/ranlib ../../../libLLVMX86AsmPrinter.a

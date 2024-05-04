@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../libLLVMDemangle.a CMakeFiles/LLVMDemangle.dir/Demangle.cpp.o CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o CMakeFiles/LLVMDemangle.dir/MicrosoftDemangle.cpp.o CMakeFiles/LLVMDemangle.dir/MicrosoftDemangleNodes.cpp.o CMakeFiles/LLVMDemangle.dir/RustDemangle.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../libLLVMDemangle.a
+/usr/bin/ar qc ../libLLVMDemangle.a CMakeFiles/LLVMDemangle.dir/Demangle.cpp.o CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o CMakeFiles/LLVMDemangle.dir/MicrosoftDemangle.cpp.o CMakeFiles/LLVMDemangle.dir/MicrosoftDemangleNodes.cpp.o CMakeFiles/LLVMDemangle.dir/RustDemangle.cpp.o
+/usr/bin/ranlib ../libLLVMDemangle.a

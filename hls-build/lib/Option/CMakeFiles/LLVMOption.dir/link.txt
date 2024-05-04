@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../libLLVMOption.a CMakeFiles/LLVMOption.dir/Arg.cpp.o CMakeFiles/LLVMOption.dir/ArgList.cpp.o CMakeFiles/LLVMOption.dir/Option.cpp.o CMakeFiles/LLVMOption.dir/OptTable.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../libLLVMOption.a
+/usr/bin/ar qc ../libLLVMOption.a CMakeFiles/LLVMOption.dir/Arg.cpp.o CMakeFiles/LLVMOption.dir/ArgList.cpp.o CMakeFiles/LLVMOption.dir/Option.cpp.o CMakeFiles/LLVMOption.dir/OptTable.cpp.o
+/usr/bin/ranlib ../libLLVMOption.a

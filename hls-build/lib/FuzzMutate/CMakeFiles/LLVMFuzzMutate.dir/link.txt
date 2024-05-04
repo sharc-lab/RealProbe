@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../libLLVMFuzzMutate.a CMakeFiles/LLVMFuzzMutate.dir/FuzzerCLI.cpp.o CMakeFiles/LLVMFuzzMutate.dir/IRMutator.cpp.o CMakeFiles/LLVMFuzzMutate.dir/OpDescriptor.cpp.o CMakeFiles/LLVMFuzzMutate.dir/Operations.cpp.o CMakeFiles/LLVMFuzzMutate.dir/RandomIRBuilder.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../libLLVMFuzzMutate.a
+/usr/bin/ar qc ../libLLVMFuzzMutate.a CMakeFiles/LLVMFuzzMutate.dir/FuzzerCLI.cpp.o CMakeFiles/LLVMFuzzMutate.dir/IRMutator.cpp.o CMakeFiles/LLVMFuzzMutate.dir/OpDescriptor.cpp.o CMakeFiles/LLVMFuzzMutate.dir/Operations.cpp.o CMakeFiles/LLVMFuzzMutate.dir/RandomIRBuilder.cpp.o
+/usr/bin/ranlib ../libLLVMFuzzMutate.a

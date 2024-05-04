@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../lib/libclangHandleCXX.a CMakeFiles/clangHandleCXX.dir/handle_cxx.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../lib/libclangHandleCXX.a
+/usr/bin/ar qc ../../../../../lib/libclangHandleCXX.a CMakeFiles/clangHandleCXX.dir/handle_cxx.cpp.o
+/usr/bin/ranlib ../../../../../lib/libclangHandleCXX.a

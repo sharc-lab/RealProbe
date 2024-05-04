@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../libLLVMX86Disassembler.a CMakeFiles/LLVMX86Disassembler.dir/X86Disassembler.cpp.o CMakeFiles/LLVMX86Disassembler.dir/X86DisassemblerDecoder.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../libLLVMX86Disassembler.a
+/usr/bin/ar qc ../../../libLLVMX86Disassembler.a CMakeFiles/LLVMX86Disassembler.dir/X86Disassembler.cpp.o CMakeFiles/LLVMX86Disassembler.dir/X86DisassemblerDecoder.cpp.o
+/usr/bin/ranlib ../../../libLLVMX86Disassembler.a

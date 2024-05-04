@@ -1,5 +1,4 @@
 file(REMOVE_RECURSE
-  "../../lib/.7"
   "../../lib/libLTO.pdb"
   "../../lib/libLTO.so"
   "../../lib/libLTO.so.7"

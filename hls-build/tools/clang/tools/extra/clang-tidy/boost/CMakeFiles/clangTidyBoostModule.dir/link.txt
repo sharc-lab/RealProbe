@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../../lib/libclangTidyBoostModule.a CMakeFiles/clangTidyBoostModule.dir/BoostTidyModule.cpp.o CMakeFiles/clangTidyBoostModule.dir/UseToStringCheck.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../../lib/libclangTidyBoostModule.a
+/usr/bin/ar qc ../../../../../../lib/libclangTidyBoostModule.a CMakeFiles/clangTidyBoostModule.dir/BoostTidyModule.cpp.o CMakeFiles/clangTidyBoostModule.dir/UseToStringCheck.cpp.o
+/usr/bin/ranlib ../../../../../../lib/libclangTidyBoostModule.a

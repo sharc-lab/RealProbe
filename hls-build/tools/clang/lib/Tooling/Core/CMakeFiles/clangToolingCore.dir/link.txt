@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../lib/libclangToolingCore.a CMakeFiles/clangToolingCore.dir/Lookup.cpp.o CMakeFiles/clangToolingCore.dir/Replacement.cpp.o CMakeFiles/clangToolingCore.dir/Diagnostic.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../lib/libclangToolingCore.a
+/usr/bin/ar qc ../../../../../lib/libclangToolingCore.a CMakeFiles/clangToolingCore.dir/Lookup.cpp.o CMakeFiles/clangToolingCore.dir/Replacement.cpp.o CMakeFiles/clangToolingCore.dir/Diagnostic.cpp.o
+/usr/bin/ranlib ../../../../../lib/libclangToolingCore.a

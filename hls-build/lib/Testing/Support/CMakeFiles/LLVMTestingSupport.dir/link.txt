@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../libLLVMTestingSupport.a CMakeFiles/LLVMTestingSupport.dir/Error.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../libLLVMTestingSupport.a
+/usr/bin/ar qc ../../libLLVMTestingSupport.a CMakeFiles/LLVMTestingSupport.dir/Error.cpp.o
+/usr/bin/ranlib ../../libLLVMTestingSupport.a

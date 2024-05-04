@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../lib/libclangTidy.a CMakeFiles/clangTidy.dir/ClangTidy.cpp.o CMakeFiles/clangTidy.dir/ClangTidyModule.cpp.o CMakeFiles/clangTidy.dir/ClangTidyDiagnosticConsumer.cpp.o CMakeFiles/clangTidy.dir/ClangTidyOptions.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../lib/libclangTidy.a
+/usr/bin/ar qc ../../../../../lib/libclangTidy.a CMakeFiles/clangTidy.dir/ClangTidy.cpp.o CMakeFiles/clangTidy.dir/ClangTidyModule.cpp.o CMakeFiles/clangTidy.dir/ClangTidyDiagnosticConsumer.cpp.o CMakeFiles/clangTidy.dir/ClangTidyOptions.cpp.o
+/usr/bin/ranlib ../../../../../lib/libclangTidy.a

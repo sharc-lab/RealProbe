@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../../lib/libclangMove.a CMakeFiles/clangMove.dir/ClangMove.cpp.o CMakeFiles/clangMove.dir/HelperDeclRefGraph.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../../lib/libclangMove.a
+/usr/bin/ar qc ../../../../../lib/libclangMove.a CMakeFiles/clangMove.dir/ClangMove.cpp.o CMakeFiles/clangMove.dir/HelperDeclRefGraph.cpp.o
+/usr/bin/ranlib ../../../../../lib/libclangMove.a

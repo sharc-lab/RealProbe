@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../libLLVMPasses.a CMakeFiles/LLVMPasses.dir/PassBuilder.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../libLLVMPasses.a
+/usr/bin/ar qc ../libLLVMPasses.a CMakeFiles/LLVMPasses.dir/PassBuilder.cpp.o
+/usr/bin/ranlib ../libLLVMPasses.a

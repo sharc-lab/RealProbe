@@ -1,5 +1,4 @@
 file(REMOVE_RECURSE
-  "../../../../lib/.7"
   "../../../../lib/libclang.pdb"
   "../../../../lib/libclang.so"
   "../../../../lib/libclang.so.7"

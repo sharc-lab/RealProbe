@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../../../lib/libclangEdit.a CMakeFiles/clangEdit.dir/Commit.cpp.o CMakeFiles/clangEdit.dir/EditedSource.cpp.o CMakeFiles/clangEdit.dir/RewriteObjCFoundationAPI.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../../../lib/libclangEdit.a
+/usr/bin/ar qc ../../../../lib/libclangEdit.a CMakeFiles/clangEdit.dir/Commit.cpp.o CMakeFiles/clangEdit.dir/EditedSource.cpp.o CMakeFiles/clangEdit.dir/RewriteObjCFoundationAPI.cpp.o
+/usr/bin/ranlib ../../../../lib/libclangEdit.a

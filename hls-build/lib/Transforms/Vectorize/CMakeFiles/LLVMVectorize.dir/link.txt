@@ -1,2 +1,2 @@
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ar qc ../../libLLVMVectorize.a CMakeFiles/LLVMVectorize.dir/LoadStoreVectorizer.cpp.o CMakeFiles/LLVMVectorize.dir/LoopVectorize.cpp.o CMakeFiles/LLVMVectorize.dir/SLPVectorizer.cpp.o CMakeFiles/LLVMVectorize.dir/Vectorize.cpp.o CMakeFiles/LLVMVectorize.dir/VPlan.cpp.o
-/usr/scratch/jkim3998/.conda/dst_jiho/hlsllvm/bin/x86_64-conda-linux-gnu-ranlib ../../libLLVMVectorize.a
+/usr/bin/ar qc ../../libLLVMVectorize.a CMakeFiles/LLVMVectorize.dir/LoadStoreVectorizer.cpp.o CMakeFiles/LLVMVectorize.dir/LoopVectorize.cpp.o CMakeFiles/LLVMVectorize.dir/SLPVectorizer.cpp.o CMakeFiles/LLVMVectorize.dir/Vectorize.cpp.o CMakeFiles/LLVMVectorize.dir/VPlan.cpp.o
+/usr/bin/ranlib ../../libLLVMVectorize.a
