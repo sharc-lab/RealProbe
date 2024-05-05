@@ -140,7 +140,7 @@ return 1
     if {$realprobeFound} {
         puts $file "add_files -norecurse \[file join $solPath rprobe realprobe_ip.v\]"
     }
-    puts $file "set_property AUTO_INCREMENTAL_CHECKPOINT.DIRECTORY $boardsPynqz2Path/$prjname.srcs/utils_1/imports/impl_1 \[get_runs impl_1\]"
+    # puts $file "set_property AUTO_INCREMENTAL_CHECKPOINT.DIRECTORY $boardsPynqz2Path/$prjname.srcs/utils_1/imports/impl_1 \[get_runs impl_1\]"
 
     puts $file "update_compile_order -fileset sources_1"
     puts $file "startgroup"
@@ -212,7 +212,10 @@ return 1
     puts $file "update_compile_order -fileset sources_1"
     puts $file "set_property top design_1_wrapper \[current_fileset\]"
     puts $file "update_compile_order -fileset sources_1"
-    puts $file "launch_runs impl_1 -to_step write_bitstream -jobs 8"
+    puts $file "set_property AUTO_INCREMENTAL_CHECKPOINT.DIRECTORY $boardsPynqz2Path/$prjname.srcs/utils_1/imports/impl_1 \[get_runs impl_1\]"
+
+    puts $file "reset_runs synth_1"
+    puts $file "launch_runs impl_1 -to_step write_bitstream -jobs 4"
     puts $file "wait_on_run impl_1"
     puts $file "close_project"
     puts $file "exit"
