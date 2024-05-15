@@ -1,5 +1,5 @@
 # RealProbe🔍
-**On-FPGA profiling tool for HLS designs**
+**In-FPGA profiling tool for HLS designs**
 
 
 ## About
@@ -16,9 +16,8 @@ It is developed and maintained by [Jiho Kim][1] from [Sharc Lab][2] at [Georgia 
 
 ## Useful Links
 
-[Documentation][9]
-
-Tutorials ([FCCM 2024][10])
+Docs: [RealProbe][9]
+Tutorial: ([FCCM 2024][10])
 
 [9]: https://realprobe-doc.readthedocs.io/en/latest
 [10]: https://sharclab.ece.gatech.edu/open-source-projects/
