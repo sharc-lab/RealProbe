@@ -49,21 +49,23 @@ git clone https://github.com/sharc-lab/RealProbe.git
 cd RealProbe
 ```
 
-Go to your project folder (with C/C++ codes and Vitis_HLS run tcl script) and copy the Makefile from RealProbe.
 
 > **Warning**
 >
 > Please note that the name of the tcl script should be hls.tcl, and don't change the variable name inside. For more information, refer examples folder for tcl script examples.
-
-```bash
-cp RealProbe/realprobe/Makefile .
-```
 
 In your Makefile, specify the path to your git repository
 
 ```bash
 REALPROBE_PATH := <YOUR/GIT/CLONED/PATH>/realprobe
 HLS_BUILD_PATH := <YOUR/GIT/CLONED/PATH>/hls-build
+```
+
+Go to your project folder (with C/C++ codes and Vitis_HLS run tcl script) and copy the Makefile from RealProbe.
+
+
+```bash
+cp RealProbe/realprobe/Makefile .
 ```
 
 Then, run RealProbe!
