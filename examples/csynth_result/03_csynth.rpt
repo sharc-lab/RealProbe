@@ -1,0 +1,175 @@
+
+
+================================================================
+== Synthesis Summary Report of 'window_fn_top'
+================================================================
++ General Information: 
+    * Date:           Sat May 18 10:56:08 2024
+    * Version:        2023.1.1 (Build 3869133 on Jun 15 2023)
+    * Project:        project
+    * Solution:       solution1 (Vivado IP Flow Target)
+    * Product family: zynq
+    * Target device:  xc7z020-clg400-1
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +--------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+---------+-----------+-----------+-----+
+    |                Modules               | Issue|      | Latency |  Latency  | Iteration|         | Trip |          |         |         |           |           |     |
+    |                & Loops               | Type | Slack| (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined|  BRAM   |   DSP   |     FF    |    LUT    | URAM|
+    +--------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+---------+-----------+-----------+-----+
+    |+ window_fn_top                       |     -|  0.00|     1565|  1.565e+04|         -|     1566|     -|        no|   9 (3%)|  1 (~0%)|  2244 (2%)|  2456 (4%)|    -|
+    | + window_fn_top_Pipeline_1           |     -|  0.00|      515|  5.150e+03|         -|      515|     -|        no|        -|        -|   43 (~0%)|   74 (~0%)|    -|
+    |  o Loop 1                            |     -|  7.30|      513|  5.130e+03|         3|        1|   512|       yes|        -|        -|          -|          -|    -|
+    | + window_fn_top_Pipeline_winfn_loop  |     -|  1.71|      516|  5.160e+03|         -|      516|     -|        no|  1 (~0%)|  1 (~0%)|  140 (~0%)|  101 (~0%)|    -|
+    |  o winfn_loop                        |     -|  7.30|      514|  5.140e+03|         4|        1|   512|       yes|        -|        -|          -|          -|    -|
+    | + window_fn_top_Pipeline_3           |     -|  0.00|      515|  5.150e+03|         -|      515|     -|        no|        -|        -|   40 (~0%)|   74 (~0%)|    -|
+    |  o Loop 1                            |     -|  7.30|      513|  5.130e+03|         3|        1|   512|       yes|        -|        -|          -|          -|    -|
+    +--------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+---------+-----------+-----------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| Interface    | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   | Resource Estimate |
+|              | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |                   |
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| m_axi_a_port | 8 -> 8     | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=2            |
+| m_axi_b_port | 24 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=4            |
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 6             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register  | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL      | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER      | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER    | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR    | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | outdata_1 | 0x10   | 32    | W      | Data signal of outdata           |                                                                      |
+| s_axi_control | outdata_2 | 0x14   | 32    | W      | Data signal of outdata           |                                                                      |
+| s_axi_control | indata_1  | 0x1c   | 32    | W      | Data signal of indata            |                                                                      |
+| s_axi_control | indata_2  | 0x20   | 32    | W      | Data signal of indata            |                                                                      |
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+--------------------------------------+
+| Argument | Direction | Datatype                             |
++----------+-----------+--------------------------------------+
+| outdata  | out       | ap_fixed<24, 8, AP_TRN, AP_WRAP, 0>* |
+| indata   | in        | ap_fixed<8, 8, AP_TRN, AP_WRAP, 0>*  |
++----------+-----------+--------------------------------------+
+
+* SW-to-HW Mapping
++----------+---------------+-----------+----------+-------------------------------------+
+| Argument | HW Interface  | HW Type   | HW Usage | HW Info                             |
++----------+---------------+-----------+----------+-------------------------------------+
+| outdata  | m_axi_b_port  | interface |          |                                     |
+| outdata  | s_axi_control | register  | offset   | name=outdata_1 offset=0x10 range=32 |
+| outdata  | s_axi_control | register  | offset   | name=outdata_2 offset=0x14 range=32 |
+| indata   | m_axi_a_port  | interface |          |                                     |
+| indata   | s_axi_control | register  | offset   | name=indata_1 offset=0x1c range=32  |
+| indata   | s_axi_control | register  | offset   | name=indata_2 offset=0x20 range=32  |
++----------+---------------+-----------+----------+-------------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* Inferred Burst Summary
++--------------+-----------+--------+-------+-----------+------------------------+
+| HW Interface | Direction | Length | Width | Loop      | Loop Location          |
++--------------+-----------+--------+-------+-----------+------------------------+
+| m_axi_a_port | read      | 512    | 8     | anonymous | window_fn_top.cpp:40:5 |
+| m_axi_b_port | write     | 512    | 32    | anonymous | window_fn_top.cpp:51:5 |
++--------------+-----------+--------+-------+-----------+------------------------+
+
+* All M_AXI Variable Accesses
++--------------+----------+------------------------+-----------+--------------+--------+-----------+------------------------+------------+------------------------------------------------------------------------------------------------------+
+| HW Interface | Variable | Access Location        | Direction | Burst Status | Length | Loop      | Loop Location          | Resolution | Problem                                                                                              |
++--------------+----------+------------------------+-----------+--------------+--------+-----------+------------------------+------------+------------------------------------------------------------------------------------------------------+
+| m_axi_a_port | indata   | window_fn_top.cpp:40:5 | read      | Widen Fail   |        | anonymous | window_fn_top.cpp:40:5 | 214-353    | Could not widen since type i8 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_a_port | indata   | window_fn_top.cpp:40:5 | read      | Inferred     | 512    | anonymous | window_fn_top.cpp:40:5 |            |                                                                                                      |
+| m_axi_b_port | outdata  | window_fn_top.cpp:51:5 | write     | Widen Fail   |        |           |                        |            | i24 allocated space contains padding. This is unsupported                                            |
+| m_axi_b_port | outdata  | window_fn_top.cpp:51:5 | write     | Inferred     | 512    | anonymous | window_fn_top.cpp:51:5 |            |                                                                                                      |
++--------------+----------+------------------------+-----------+--------------+--------+-----------+------------------------+------------+------------------------------------------------------------------------------------------------------+
+
+    * Resolution URL: www.xilinx.com/cgi-bin/docs/rdoc?v=2023.1;t=hls+guidance;d=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++--------------------------------------+-----+--------+-----------+-----+--------+---------+
+| Name                                 | DSP | Pragma | Variable  | Op  | Impl   | Latency |
++--------------------------------------+-----+--------+-----------+-----+--------+---------+
+| + window_fn_top                      | 1   |        |           |     |        |         |
+|  + window_fn_top_Pipeline_1          | 0   |        |           |     |        |         |
+|    empty_fu_96_p2                    | -   |        | empty     | add | fabric | 0       |
+|  + window_fn_top_Pipeline_winfn_loop | 1   |        |           |     |        |         |
+|    add_ln101_fu_89_p2                | -   |        | add_ln101 | add | fabric | 0       |
+|    mul_17ns_8s_24_1_1_U4             | 1   |        | mul_ln103 | mul | auto   | 0       |
+|  + window_fn_top_Pipeline_3          | 0   |        |           |     |        |         |
+|    empty_fu_99_p2                    | -   |        | empty     | add | fabric | 0       |
++--------------------------------------+-----+--------+-----------+-----+--------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
++--------------------------------------+------+------+--------+-----------+---------+------+---------+
+| Name                                 | BRAM | URAM | Pragma | Variable  | Storage | Impl | Latency |
++--------------------------------------+------+------+--------+-----------+---------+------+---------+
+| + window_fn_top                      | 9    | 0    |        |           |         |      |         |
+|   in_buff_U                          | 1    | -    |        | in_buff   | ram_1p  | auto | 1       |
+|   out_buff_U                         | 2    | -    |        | out_buff  | ram_1p  | auto | 1       |
+|  + window_fn_top_Pipeline_winfn_loop | 1    | 0    |        |           |         |      |         |
+|    coeff_tab_U                       | 1    | -    |        | coeff_tab | rom_1p  | auto | 1       |
++--------------------------------------+------+------+--------+-----------+---------+------+---------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Ignored Pragmas
++-----------+---------+---------------------------------------+----------------------------+
+| Type      | Options | Location                              | Messages                   |
++-----------+---------+---------------------------------------+----------------------------+
+| realprobe |         | window_fn_top.cpp:35 in window_fn_top | unknown HLS pragma ignored |
++-----------+---------+---------------------------------------+----------------------------+
+
+* Valid Pragma Syntax
++-----------+---------------------------------------------------------------+-----------------------------------------------+
+| Type      | Options                                                       | Location                                      |
++-----------+---------------------------------------------------------------+-----------------------------------------------+
+| interface | m_axi port = indata depth=512 offset = slave bundle = a_port  | window_fn_top.cpp:32 in window_fn_top         |
+| interface | m_axi port = outdata depth=512 offset = slave bundle = b_port | window_fn_top.cpp:33 in window_fn_top         |
+| interface | s_axilite register port=return                                | window_fn_top.cpp:34 in window_fn_top, return |
++-----------+---------------------------------------------------------------+-----------------------------------------------+
+
+

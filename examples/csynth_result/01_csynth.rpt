@@ -1,0 +1,233 @@
+
+
+================================================================
+== Synthesis Summary Report of 'fxp_sqrt_top'
+================================================================
++ General Information: 
+    * Date:           Fri May 17 11:09:50 2024
+    * Version:        2023.1.1 (Build 3869133 on Jun 15 2023)
+    * Project:        project
+    * Solution:       solution1 (Vivado IP Flow Target)
+    * Product family: zynq
+    * Target device:  xc7z020-clg400-1
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+----+-----------+------------+-----+
+    |                  Modules                 | Issue|      | Latency |  Latency  | Iteration|         | Trip |          |         |    |           |            |     |
+    |                  & Loops                 | Type | Slack| (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined|  BRAM   | DSP|     FF    |     LUT    | URAM|
+    +------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+----+-----------+------------+-----+
+    |+ fxp_sqrt_top                            |     -|  0.00|     1580|  1.580e+04|         -|     1581|     -|        no|  10 (3%)|   -|  2914 (2%)|  8045 (15%)|    -|
+    | + fxp_sqrt_top_Pipeline_1                |     -|  0.00|      515|  5.150e+03|         -|      515|     -|        no|        -|   -|   60 (~0%)|    76 (~0%)|    -|
+    |  o Loop 1                                |     -|  7.30|      513|  5.130e+03|         3|        1|   512|       yes|        -|   -|          -|           -|    -|
+    | + fxp_sqrt_top_Pipeline_2                |     -|  0.00|      515|  5.150e+03|         -|      515|     -|        no|        -|   -|   64 (~0%)|    76 (~0%)|    -|
+    |  o Loop 1                                |     -|  7.30|      513|  5.130e+03|         3|        1|   512|       yes|        -|   -|          -|           -|    -|
+    | + fxp_sqrt_top_Pipeline_VITIS_LOOP_73_1  |     -|  0.44|      531|  5.310e+03|         -|      531|     -|        no|        -|   -|  698 (~0%)|  5637 (10%)|    -|
+    |  o VITIS_LOOP_73_1                       |     -|  7.30|      529|  5.290e+03|        18|        1|   513|       yes|        -|   -|          -|           -|    -|
+    | + fxp_sqrt_top_Pipeline_4                |     -|  0.00|      515|  5.150e+03|         -|      515|     -|        no|        -|   -|   44 (~0%)|    74 (~0%)|    -|
+    |  o Loop 1                                |     -|  7.30|      513|  5.130e+03|         3|        1|   512|       yes|        -|   -|          -|           -|    -|
+    +------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+----+-----------+------------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| Interface    | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   | Resource Estimate |
+|              | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |                   |
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| m_axi_a_port | 24 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=4            |
+| m_axi_b_port | 28 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=4            |
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 6             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register  | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL      | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER      | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER    | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR    | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | in_val_1  | 0x10   | 32    | W      | Data signal of in_val            |                                                                      |
+| s_axi_control | in_val_2  | 0x14   | 32    | W      | Data signal of in_val            |                                                                      |
+| s_axi_control | out_val_1 | 0x1c   | 32    | W      | Data signal of out_val           |                                                                      |
+| s_axi_control | out_val_2 | 0x20   | 32    | W      | Data signal of out_val           |                                                                      |
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+----------+
+| Argument | Direction | Datatype |
++----------+-----------+----------+
+| in_val   | in        | pointer  |
+| out_val  | inout     | pointer  |
++----------+-----------+----------+
+
+* SW-to-HW Mapping
++----------+---------------+-----------+----------+-------------------------------------+
+| Argument | HW Interface  | HW Type   | HW Usage | HW Info                             |
++----------+---------------+-----------+----------+-------------------------------------+
+| in_val   | m_axi_a_port  | interface |          |                                     |
+| in_val   | s_axi_control | register  | offset   | name=in_val_1 offset=0x10 range=32  |
+| in_val   | s_axi_control | register  | offset   | name=in_val_2 offset=0x14 range=32  |
+| out_val  | m_axi_b_port  | interface |          |                                     |
+| out_val  | s_axi_control | register  | offset   | name=out_val_1 offset=0x1c range=32 |
+| out_val  | s_axi_control | register  | offset   | name=out_val_2 offset=0x20 range=32 |
++----------+---------------+-----------+----------+-------------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* Inferred Burst Summary
++--------------+-----------+--------+-------+-----------+-----------------------+
+| HW Interface | Direction | Length | Width | Loop      | Loop Location         |
++--------------+-----------+--------+-------+-----------+-----------------------+
+| m_axi_a_port | read      | 512    | 32    | anonymous | fxp_sqrt_top.cpp:35:4 |
+| m_axi_b_port | read      | 512    | 32    | anonymous | fxp_sqrt_top.cpp:36:4 |
+| m_axi_b_port | write     | 512    | 32    | anonymous | fxp_sqrt_top.cpp:40:4 |
++--------------+-----------+--------+-------+-----------+-----------------------+
+
+* All M_AXI Variable Accesses
++--------------+----------+-----------------------+-----------+--------------+--------+-----------+-----------------------+------------+-------------------------------------------------------------------------------------------------------+
+| HW Interface | Variable | Access Location       | Direction | Burst Status | Length | Loop      | Loop Location         | Resolution | Problem                                                                                               |
++--------------+----------+-----------------------+-----------+--------------+--------+-----------+-----------------------+------------+-------------------------------------------------------------------------------------------------------+
+| m_axi_a_port | in_val   | fxp_sqrt_top.cpp:35:4 | read      | Widen Fail   |        |           |                       |            | i24 allocated space contains padding. This is unsupported                                             |
+| m_axi_a_port | in_val   | fxp_sqrt_top.cpp:35:4 | read      | Inferred     | 512    | anonymous | fxp_sqrt_top.cpp:35:4 |            |                                                                                                       |
+| m_axi_b_port | out_val  | fxp_sqrt_top.cpp:36:4 | read      | Widen Fail   |        | anonymous | fxp_sqrt_top.cpp:36:4 | 214-353    | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_b_port | out_val  | fxp_sqrt_top.cpp:36:4 | read      | Inferred     | 512    | anonymous | fxp_sqrt_top.cpp:36:4 |            |                                                                                                       |
+| m_axi_b_port | out_val  | fxp_sqrt_top.cpp:40:4 | write     | Widen Fail   |        | anonymous | fxp_sqrt_top.cpp:40:4 | 214-353    | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_b_port | out_val  | fxp_sqrt_top.cpp:40:4 | write     | Inferred     | 512    | anonymous | fxp_sqrt_top.cpp:40:4 |            |                                                                                                       |
++--------------+----------+-----------------------+-----------+--------------+--------+-----------+-----------------------+------------+-------------------------------------------------------------------------------------------------------+
+
+    * Resolution URL: www.xilinx.com/cgi-bin/docs/rdoc?v=2023.1;t=hls+guidance;d=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++------------------------------------------+-----+--------+-------------+-----+--------+---------+
+| Name                                     | DSP | Pragma | Variable    | Op  | Impl   | Latency |
++------------------------------------------+-----+--------+-------------+-----+--------+---------+
+| + fxp_sqrt_top                           | 0   |        |             |     |        |         |
+|  + fxp_sqrt_top_Pipeline_1               | 0   |        |             |     |        |         |
+|    empty_fu_94_p2                        | -   |        | empty       | add | fabric | 0       |
+|  + fxp_sqrt_top_Pipeline_2               | 0   |        |             |     |        |         |
+|    empty_fu_94_p2                        | -   |        | empty       | add | fabric | 0       |
+|  + fxp_sqrt_top_Pipeline_VITIS_LOOP_73_1 | 0   |        |             |     |        |         |
+|    add_ln73_fu_430_p2                    | -   |        | add_ln73    | add | fabric | 0       |
+|    add_ln99_fu_455_p2                    | -   |        | add_ln99    | add | fabric | 0       |
+|    sub_ln93_1_fu_623_p2                  | -   |        | sub_ln93_1  | sub | fabric | 0       |
+|    add_ln99_3_fu_646_p2                  | -   |        | add_ln99_3  | add | fabric | 0       |
+|    sub_ln93_2_fu_712_p2                  | -   |        | sub_ln93_2  | sub | fabric | 0       |
+|    add_ln99_4_fu_736_p2                  | -   |        | add_ln99_4  | add | fabric | 0       |
+|    sub_ln93_3_fu_802_p2                  | -   |        | sub_ln93_3  | sub | fabric | 0       |
+|    add_ln99_5_fu_825_p2                  | -   |        | add_ln99_5  | add | fabric | 0       |
+|    sub_ln93_4_fu_891_p2                  | -   |        | sub_ln93_4  | sub | fabric | 0       |
+|    add_ln99_6_fu_915_p2                  | -   |        | add_ln99_6  | add | fabric | 0       |
+|    sub_ln93_5_fu_981_p2                  | -   |        | sub_ln93_5  | sub | fabric | 0       |
+|    add_ln99_7_fu_1004_p2                 | -   |        | add_ln99_7  | add | fabric | 0       |
+|    sub_ln93_6_fu_1070_p2                 | -   |        | sub_ln93_6  | sub | fabric | 0       |
+|    add_ln99_8_fu_1094_p2                 | -   |        | add_ln99_8  | add | fabric | 0       |
+|    sub_ln93_7_fu_1160_p2                 | -   |        | sub_ln93_7  | sub | fabric | 0       |
+|    add_ln99_9_fu_1183_p2                 | -   |        | add_ln99_9  | add | fabric | 0       |
+|    sub_ln93_8_fu_1249_p2                 | -   |        | sub_ln93_8  | sub | fabric | 0       |
+|    add_ln99_10_fu_1273_p2                | -   |        | add_ln99_10 | add | fabric | 0       |
+|    sub_ln93_9_fu_1339_p2                 | -   |        | sub_ln93_9  | sub | fabric | 0       |
+|    add_ln99_11_fu_1362_p2                | -   |        | add_ln99_11 | add | fabric | 0       |
+|    sub_ln93_10_fu_1428_p2                | -   |        | sub_ln93_10 | sub | fabric | 0       |
+|    add_ln99_12_fu_1452_p2                | -   |        | add_ln99_12 | add | fabric | 0       |
+|    sub_ln93_11_fu_1518_p2                | -   |        | sub_ln93_11 | sub | fabric | 0       |
+|    add_ln99_13_fu_1541_p2                | -   |        | add_ln99_13 | add | fabric | 0       |
+|    sub_ln93_12_fu_1607_p2                | -   |        | sub_ln93_12 | sub | fabric | 0       |
+|    add_ln99_14_fu_1631_p2                | -   |        | add_ln99_14 | add | fabric | 0       |
+|    sub_ln93_13_fu_1697_p2                | -   |        | sub_ln93_13 | sub | fabric | 0       |
+|    add_ln99_15_fu_1720_p2                | -   |        | add_ln99_15 | add | fabric | 0       |
+|    sub_ln93_14_fu_1786_p2                | -   |        | sub_ln93_14 | sub | fabric | 0       |
+|    add_ln99_16_fu_1810_p2                | -   |        | add_ln99_16 | add | fabric | 0       |
+|    sub_ln93_15_fu_1876_p2                | -   |        | sub_ln93_15 | sub | fabric | 0       |
+|    add_ln99_17_fu_1899_p2                | -   |        | add_ln99_17 | add | fabric | 0       |
+|    sub_ln93_16_fu_1965_p2                | -   |        | sub_ln93_16 | sub | fabric | 0       |
+|    add_ln99_18_fu_1989_p2                | -   |        | add_ln99_18 | add | fabric | 0       |
+|    sub_ln93_17_fu_2055_p2                | -   |        | sub_ln93_17 | sub | fabric | 0       |
+|    add_ln99_19_fu_2078_p2                | -   |        | add_ln99_19 | add | fabric | 0       |
+|    sub_ln93_18_fu_2144_p2                | -   |        | sub_ln93_18 | sub | fabric | 0       |
+|    add_ln99_20_fu_2168_p2                | -   |        | add_ln99_20 | add | fabric | 0       |
+|    sub_ln93_19_fu_2234_p2                | -   |        | sub_ln93_19 | sub | fabric | 0       |
+|    add_ln99_21_fu_2257_p2                | -   |        | add_ln99_21 | add | fabric | 0       |
+|    sub_ln93_20_fu_2323_p2                | -   |        | sub_ln93_20 | sub | fabric | 0       |
+|    add_ln99_22_fu_2347_p2                | -   |        | add_ln99_22 | add | fabric | 0       |
+|    sub_ln93_21_fu_2413_p2                | -   |        | sub_ln93_21 | sub | fabric | 0       |
+|    add_ln99_23_fu_2436_p2                | -   |        | add_ln99_23 | add | fabric | 0       |
+|    sub_ln93_22_fu_2502_p2                | -   |        | sub_ln93_22 | sub | fabric | 0       |
+|    add_ln99_24_fu_2526_p2                | -   |        | add_ln99_24 | add | fabric | 0       |
+|    sub_ln93_23_fu_2592_p2                | -   |        | sub_ln93_23 | sub | fabric | 0       |
+|    add_ln99_25_fu_2615_p2                | -   |        | add_ln99_25 | add | fabric | 0       |
+|    sub_ln93_24_fu_2681_p2                | -   |        | sub_ln93_24 | sub | fabric | 0       |
+|    add_ln99_26_fu_2705_p2                | -   |        | add_ln99_26 | add | fabric | 0       |
+|    sub_ln93_25_fu_2771_p2                | -   |        | sub_ln93_25 | sub | fabric | 0       |
+|    add_ln99_27_fu_2794_p2                | -   |        | add_ln99_27 | add | fabric | 0       |
+|    sub_ln93_26_fu_2860_p2                | -   |        | sub_ln93_26 | sub | fabric | 0       |
+|    add_ln99_28_fu_2884_p2                | -   |        | add_ln99_28 | add | fabric | 0       |
+|    q_fu_2922_p2                          | -   |        | q           | add | fabric | 0       |
+|  + fxp_sqrt_top_Pipeline_4               | 0   |        |             |     |        |         |
+|    empty_fu_99_p2                        | -   |        | empty       | add | fabric | 0       |
++------------------------------------------+-----+--------+-------------+-----+--------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
++------------------+------+------+--------+--------------+---------+------+---------+
+| Name             | BRAM | URAM | Pragma | Variable     | Storage | Impl | Latency |
++------------------+------+------+--------+--------------+---------+------+---------+
+| + fxp_sqrt_top   | 10   | 0    |        |              |         |      |         |
+|   in_val_buff_U  | 2    | -    |        | in_val_buff  | ram_1p  | auto | 1       |
+|   out_val_buff_U | 2    | -    |        | out_val_buff | ram_1p  | auto | 1       |
++------------------+------+------+--------+--------------+---------+------+---------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Ignored Pragmas
++-----------+---------+-------------------------------------+----------------------------+
+| Type      | Options | Location                            | Messages                   |
++-----------+---------+-------------------------------------+----------------------------+
+| realprobe |         | fxp_sqrt_top.cpp:30 in fxp_sqrt_top | unknown HLS pragma ignored |
++-----------+---------+-------------------------------------+----------------------------+
+
+* Valid Pragma Syntax
++-----------+---------------------------------------------------------------+---------------------------------------------+
+| Type      | Options                                                       | Location                                    |
++-----------+---------------------------------------------------------------+---------------------------------------------+
+| interface | m_axi port = in_val depth=512 offset = slave bundle = a_port  | fxp_sqrt_top.cpp:27 in fxp_sqrt_top         |
+| interface | m_axi port = out_val depth=512 offset = slave bundle = b_port | fxp_sqrt_top.cpp:28 in fxp_sqrt_top         |
+| interface | s_axilite register port=return                                | fxp_sqrt_top.cpp:29 in fxp_sqrt_top, return |
++-----------+---------------------------------------------------------------+---------------------------------------------+
+
+

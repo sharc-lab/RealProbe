@@ -28,7 +28,7 @@ INSTALL_PREFIX="hls-install"
 #NOTE: CMake 3.4.3 or higher is required
 #NOTE: Can replace with 'ninja' if it's install with "cmake -G Ninja"
 #NOTE: -DLLVM_ENABLE_DOXYGEN and -DLLVM_BUILD_DOCS are for doxygen documentation.
-cmake "$llvm_srcroot/llvm" \
+cmake3 "$llvm_srcroot/llvm" \
 	-DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX \
 	-DLLVM_EXTERNAL_CLANG_SOURCE_DIR=$llvm_srcroot/clang \
         -DLLVM_TARGETS_TO_BUILD=X86 \

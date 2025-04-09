@@ -1,0 +1,170 @@
+
+
+================================================================
+== Synthesis Summary Report of 'hamming_window'
+================================================================
++ General Information: 
+    * Date:           Thu May 16 13:05:08 2024
+    * Version:        2023.1.1 (Build 3869133 on Jun 15 2023)
+    * Project:        project
+    * Solution:       solution1 (Vivado IP Flow Target)
+    * Product family: zynq
+    * Target device:  xc7z020-clg400-1
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +--------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+---------+-----------+-----------+-----+
+    |                   Modules                  | Issue|      | Latency |  Latency  | Iteration|         | Trip |          |         |         |           |           |     |
+    |                   & Loops                  | Type | Slack| (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined|  BRAM   |   DSP   |     FF    |    LUT    | URAM|
+    +--------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+---------+-----------+-----------+-----+
+    |+ hamming_window                            |     -|  0.00|      797|  7.970e+03|         -|      798|     -|        no|   9 (3%)|  1 (~0%)|  2251 (2%)|  2439 (4%)|    -|
+    | + hamming_window_Pipeline_1                |     -|  0.00|      259|  2.590e+03|         -|      259|     -|        no|        -|        -|   48 (~0%)|   76 (~0%)|    -|
+    |  o Loop 1                                  |     -|  7.30|      257|  2.570e+03|         3|        1|   256|       yes|        -|        -|          -|          -|    -|
+    | + hamming_window_Pipeline_VITIS_LOOP_45_1  |     -|  1.72|      260|  2.600e+03|         -|      260|     -|        no|  1 (~0%)|  1 (~0%)|  149 (~0%)|  103 (~0%)|    -|
+    |  o VITIS_LOOP_45_1                         |     -|  7.30|      258|  2.580e+03|         4|        1|   256|       yes|        -|        -|          -|          -|    -|
+    | + hamming_window_Pipeline_3                |     -|  0.00|      259|  2.590e+03|         -|      259|     -|        no|        -|        -|   45 (~0%)|   76 (~0%)|    -|
+    |  o Loop 1                                  |     -|  7.30|      257|  2.570e+03|         3|        1|   256|       yes|        -|        -|          -|          -|    -|
+    +--------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+---------+-----------+-----------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| Interface    | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   | Resource Estimate |
+|              | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |                   |
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| m_axi_a_port | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=4            |
+| m_axi_b_port | 16 -> 16   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=2            |
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 6             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register  | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL      | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER      | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER    | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR    | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | outdata_1 | 0x10   | 32    | W      | Data signal of outdata           |                                                                      |
+| s_axi_control | outdata_2 | 0x14   | 32    | W      | Data signal of outdata           |                                                                      |
+| s_axi_control | indata_1  | 0x1c   | 32    | W      | Data signal of indata            |                                                                      |
+| s_axi_control | indata_2  | 0x20   | 32    | W      | Data signal of indata            |                                                                      |
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+----------+
+| Argument | Direction | Datatype |
++----------+-----------+----------+
+| outdata  | out       | int*     |
+| indata   | in        | short*   |
++----------+-----------+----------+
+
+* SW-to-HW Mapping
++----------+---------------+-----------+----------+-------------------------------------+
+| Argument | HW Interface  | HW Type   | HW Usage | HW Info                             |
++----------+---------------+-----------+----------+-------------------------------------+
+| outdata  | m_axi_a_port  | interface |          |                                     |
+| outdata  | s_axi_control | register  | offset   | name=outdata_1 offset=0x10 range=32 |
+| outdata  | s_axi_control | register  | offset   | name=outdata_2 offset=0x14 range=32 |
+| indata   | m_axi_b_port  | interface |          |                                     |
+| indata   | s_axi_control | register  | offset   | name=indata_1 offset=0x1c range=32  |
+| indata   | s_axi_control | register  | offset   | name=indata_2 offset=0x20 range=32  |
++----------+---------------+-----------+----------+-------------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* Inferred Burst Summary
++--------------+-----------+--------+-------+-----------+-----------------------+
+| HW Interface | Direction | Length | Width | Loop      | Loop Location         |
++--------------+-----------+--------+-------+-----------+-----------------------+
+| m_axi_a_port | write     | 256    | 32    | anonymous | hamming_window.c:51:4 |
+| m_axi_b_port | read      | 256    | 16    | anonymous | hamming_window.c:35:3 |
++--------------+-----------+--------+-------+-----------+-----------------------+
+
+* All M_AXI Variable Accesses
++--------------+----------+-----------------------+-----------+--------------+--------+-----------+-----------------------+------------+-------------------------------------------------------------------------------------------------------+
+| HW Interface | Variable | Access Location       | Direction | Burst Status | Length | Loop      | Loop Location         | Resolution | Problem                                                                                               |
++--------------+----------+-----------------------+-----------+--------------+--------+-----------+-----------------------+------------+-------------------------------------------------------------------------------------------------------+
+| m_axi_a_port | outdata  | hamming_window.c:51:4 | write     | Widen Fail   |        | anonymous | hamming_window.c:51:4 | 214-353    | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_a_port | outdata  | hamming_window.c:51:4 | write     | Inferred     | 256    | anonymous | hamming_window.c:51:4 |            |                                                                                                       |
+| m_axi_b_port | indata   | hamming_window.c:35:3 | read      | Widen Fail   |        | anonymous | hamming_window.c:35:3 | 214-353    | Could not widen since type i16 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_b_port | indata   | hamming_window.c:35:3 | read      | Inferred     | 256    | anonymous | hamming_window.c:35:3 |            |                                                                                                       |
++--------------+----------+-----------------------+-----------+--------------+--------+-----------+-----------------------+------------+-------------------------------------------------------------------------------------------------------+
+
+    * Resolution URL: www.xilinx.com/cgi-bin/docs/rdoc?v=2023.1;t=hls+guidance;d=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++--------------------------------------------+-----+--------+----------+-----+--------+---------+
+| Name                                       | DSP | Pragma | Variable | Op  | Impl   | Latency |
++--------------------------------------------+-----+--------+----------+-----+--------+---------+
+| + hamming_window                           | 1   |        |          |     |        |         |
+|  + hamming_window_Pipeline_1               | 0   |        |          |     |        |         |
+|    empty_fu_100_p2                         | -   |        | empty    | add | fabric | 0       |
+|  + hamming_window_Pipeline_VITIS_LOOP_45_1 | 1   |        |          |     |        |         |
+|    add_ln45_fu_89_p2                       | -   |        | add_ln45 | add | fabric | 0       |
+|    mul_16s_14ns_30_1_1_U4                  | 1   |        | mul_ln47 | mul | auto   | 0       |
+|  + hamming_window_Pipeline_3               | 0   |        |          |     |        |         |
+|    empty_fu_99_p2                          | -   |        | empty    | add | fabric | 0       |
++--------------------------------------------+-----+--------+----------+-----+--------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
++--------------------------------------------+------+------+--------+--------------+---------+------+---------+
+| Name                                       | BRAM | URAM | Pragma | Variable     | Storage | Impl | Latency |
++--------------------------------------------+------+------+--------+--------------+---------+------+---------+
+| + hamming_window                           | 9    | 0    |        |              |         |      |         |
+|   in_buff_U                                | 1    | -    |        | in_buff      | ram_1p  | auto | 1       |
+|   out_buff_U                               | 2    | -    |        | out_buff     | ram_1p  | auto | 1       |
+|  + hamming_window_Pipeline_VITIS_LOOP_45_1 | 1    | 0    |        |              |         |      |         |
+|    window_coeff_U                          | 1    | -    |        | window_coeff | rom_1p  | auto | 1       |
++--------------------------------------------+------+------+--------+--------------+---------+------+---------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-----------+---------------------------------------------------------------+-----------------------------------------------+
+| Type      | Options                                                       | Location                                      |
++-----------+---------------------------------------------------------------+-----------------------------------------------+
+| interface | m_axi port = outdata depth=256 offset = slave bundle = a_port | hamming_window.c:27 in hamming_window         |
+| interface | m_axi port = indata depth=256 offset = slave bundle = b_port  | hamming_window.c:28 in hamming_window         |
+| interface | s_axilite register port=return                                | hamming_window.c:29 in hamming_window, return |
+| realprobe |                                                               | hamming_window.c:30 in hamming_window         |
+| pipeline  |                                                               | hamming_window.c:46 in hamming_window         |
++-----------+---------------------------------------------------------------+-----------------------------------------------+
+
+

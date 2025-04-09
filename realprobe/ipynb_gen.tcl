@@ -42,17 +42,11 @@ foreach signal $signals {
 }
 # Define the path to the signals file
 set signals_file "[pwd]/${PRJ_NAME}/${SOL_NAME}/rprobe/apstart_signals.txt"
+set depth_file "[pwd]/${PRJ_NAME}/${SOL_NAME}/rprobe/conservative_tripcount.txt"
 
-# Open the signals file for reading
+# ap_signals file read
 set file [open $signals_file r]
-
-# Initialize an array to store the signals
 set ap_signals {}
-
-# Initialize a counter for the signals
-# set signal_index 0
-
-# Read each line from the file
 while {[gets $file line] != -1} {
     # Skip blank lines
     if {[string trim $line] eq ""} {
@@ -61,15 +55,23 @@ while {[gets $file line] != -1} {
     # Store non-blank lines in the signals array
     lappend ap_signals $line
 }
-
 set index 0
 foreach signal $ap_signals {
     set address [lindex $addresses $index]
     puts "ap_sig($index) = $signal"
     incr index
 }
+close $file
 
-# Close the file
+# depths file read
+set file [open $depth_file r]
+set depths {}
+while {[gets $file line] != -1} {
+    if {[string trim $line] eq ""} {
+        continue
+    }
+    lappend depths $line
+}
 close $file
 
 set notebook_data [list]
@@ -192,6 +194,91 @@ lappend notebook_data "\"The execution of the algorithm using the hardware kerne
 lappend notebook_data "\]"
 lappend notebook_data \}
 
+
+lappend notebook_data ","
+
+lappend notebook_data \{
+lappend notebook_data "\"cell_type\": \"code\","
+lappend notebook_data "\"execution_count\": null,"
+lappend notebook_data "\"metadata\": \{\},"
+lappend notebook_data "\"outputs\": \[\],"
+lappend notebook_data "\"source\": \["
+lappend notebook_data "\"READ_INDEX_ADDR = 0x190  # 7'd100 << 2\","
+lappend notebook_data "\"\\n\","
+
+set depths_str "recorder_depths = \["
+foreach d $depths {
+    append depths_str "$d, "
+}
+# Remove trailing comma and space, then close bracket
+set depths_str [string trimright $depths_str ", "]
+append depths_str "\]  # Auto-generated from depths file"
+lappend notebook_data "\"$depths_str\","
+lappend notebook_data "\"\\n\","
+
+
+lappend notebook_data "\"recorder_names = \[\","
+lappend notebook_data "\"\\n\","
+set last_index [expr {[llength $ap_signals] - 1}]
+for {set i 0} {$i <= $last_index} {incr i} {
+    set sig [lindex $ap_signals $i]
+    set comma ","  ;# Add comma except for last element
+    if {$i == $last_index} {
+        set comma ""
+    }
+    # This is correct: double-escaping for JSON inside Tcl
+    lappend notebook_data "\"    \\\"$sig\\\"$comma\","
+    lappend notebook_data "\"\\n\","
+}
+lappend notebook_data "\"]\","
+lappend notebook_data "\"\\n\","
+
+
+# lappend notebook_data "\"READ_INDEX_ADDR = 0x190  # 7'd100 << 2\""
+
+set num_recorders [llength $ap_signals]
+
+# recorder_bases
+lappend notebook_data "\"recorder_bases = \[0x08 + i * 8 for i in range($num_recorders)\]  # base addresses for start_time_x\","
+lappend notebook_data "\"\\n\","
+
+lappend notebook_data "\"\","
+
+# === Allocate DRAM buffers ===
+lappend notebook_data "\"max_depth = max(recorder_depths)\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"start_bufs = \[allocate(shape=(max_depth,), dtype=np.uint32) for _ in range($num_recorders)\]\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"end_bufs   = \[allocate(shape=(max_depth,), dtype=np.uint32) for _ in range($num_recorders)\]\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"dumped_flags = \[False\] * $num_recorders  # To avoid multiple dumps on the same full\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"def dump_recorder(i):\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    print(f\\\"\\\\n \[Recorder {i} - {recorder_names\[i\]}\] Dumping to DRAM\\\")\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    base_addr = recorder_bases\[i\]\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    for idx in range(recorder_depths\[i\]):\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        ip.write(READ_INDEX_ADDR, idx)\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        start = ip.read(base_addr)\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        end   = ip.read(base_addr + 4)\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        start_bufs\[i\]\[idx\] = start\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        end_bufs\[i\]\[idx\] = end\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        print(f\\\"  Entry {idx}: start={start}, end={end}, latency={end - start}\\\")\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    dumped_flags\[i\] = True\""
+lappend notebook_data "\]"
+lappend notebook_data "\}"
+
 lappend notebook_data ","
 
 lappend notebook_data \{
@@ -247,6 +334,7 @@ lappend notebook_data \}
 
 lappend notebook_data ","
 
+set bitmask [expr {(1 << $num_recorders) - 1}]
 lappend notebook_data \{
 lappend notebook_data "\"cell_type\": \"code\","
 lappend notebook_data "\"execution_count\": null,"
@@ -259,7 +347,17 @@ lappend notebook_data "\"isready = ip.read(0x00)\","
 lappend notebook_data "\"\\n\","
 lappend notebook_data "\"while( isready == 1 ):\","
 lappend notebook_data "\"\\n\","
-lappend notebook_data "\"    isready = ip.read(0x00)\""
+lappend notebook_data "\"    isready = ip.read(0x00)\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    full_flags = ip.read(0x04) & 0x[format %X $bitmask]\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    for i in range($num_recorders):\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        if (full_flags & (1 << i)) and not dumped_flags\[i\]:\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"            dump_recorder(i)\""
 lappend notebook_data "\]"
 lappend notebook_data \}
 
@@ -312,36 +410,136 @@ lappend notebook_data \}
 
 lappend notebook_data ","
 
+
 lappend notebook_data \{
 lappend notebook_data "\"cell_type\": \"code\","
 lappend notebook_data "\"execution_count\": null,"
 lappend notebook_data "\"metadata\": \{\},"
 lappend notebook_data "\"outputs\": \[\],"
 lappend notebook_data "\"source\": \["
-lappend notebook_data "\"num_signal = [llength $ap_signals]\","
+set base_addr_offset 0x08
+set addr_stride 0x08
+lappend notebook_data "\"READ_INDEX_ADDR = 0x190  # (7'd100 << 2)\","
 lappend notebook_data "\"\\n\","
-lappend notebook_data "\"ap_signals = \[\]\","
+lappend notebook_data "\"\","
+lappend notebook_data "\"recorder_info = \[\","
 lappend notebook_data "\"\\n\","
-lappend notebook_data "\"\\n\","
-for {set i 0} {$i < [llength $ap_signals]} {incr i} {
-    set ap_signal [lindex $ap_signals $i]
-    lappend notebook_data "\"ap_signals.append('$ap_signal')\","
+for {set i 0} {$i < $num_recorders} {incr i} {
+    set name [lindex $ap_signals $i]
+    set addr [expr {$base_addr_offset + $i * $addr_stride}]
+    set comma ","
+    if {$i == [expr {$num_recorders - 1}]} {
+        set comma ""
+    }
+    lappend notebook_data "\"    (\\\"$name\\\", 0x[format %02X $addr])$comma\","
     lappend notebook_data "\"\\n\","
-    # lappend notebook_data "ap_signals.append(\"$ap_signal\")"
 }
+lappend notebook_data "\"]\","
 lappend notebook_data "\"\\n\","
-lappend notebook_data "\"start_address = 0x00 \","
+# lappend notebook_data "\"\","
+lappend notebook_data "\"def read_recorder_entries(name, base_addr, depth):\","
 lappend notebook_data "\"\\n\","
-lappend notebook_data "\"step_size = 4 \","
+lappend notebook_data "\"    print(f\\\"\\\\n=== {name} ===\\\")\","
 lappend notebook_data "\"\\n\","
-lappend notebook_data "\"end_address = start_address + num_signal\","
+lappend notebook_data "\"    for index in range(depth):\","
 lappend notebook_data "\"\\n\","
-lappend notebook_data "\"for i in range(start_address, end_address):\","
+lappend notebook_data "\"        bram.write(READ_INDEX_ADDR, index)\","
 lappend notebook_data "\"\\n\","
-lappend notebook_data "\"    print(ap_signals\[i\], ' clock cycles = ', bram.read(i*step_size))\","
+lappend notebook_data "\"\","
 lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        start_addr = base_addr\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        end_addr = base_addr + 4\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        start_time = bram.read(start_addr)\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        end_time = bram.read(end_addr)\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        latency = end_time - start_time\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        print(f\\\"\[entry {index}\]: start={start_time}, end={end_time}, latency={latency}\\\")\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"for (name, base_addr), depth in zip(recorder_info, recorder_depths):\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    read_recorder_entries(name, base_addr, depth)\","
 lappend notebook_data "\"\\n\","
 lappend notebook_data "\" \""
+lappend notebook_data "\]"
+lappend notebook_data \}
+
+lappend notebook_data ","
+
+lappend notebook_data \{
+lappend notebook_data "\"cell_type\": \"code\","
+lappend notebook_data "\"execution_count\": null,"
+lappend notebook_data "\"metadata\": \{\},"
+lappend notebook_data "\"outputs\": \[\],"
+lappend notebook_data "\"source\": \["
+lappend notebook_data "\"import matplotlib.pyplot as plt\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"waveform_data = \[\] \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"for (name, base_addr), depth in zip(recorder_info, recorder_depths):\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    entries = \[\]\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    for index in range(depth):\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        bram.write(READ_INDEX_ADDR, index)\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        start = bram.read(base_addr)\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        end = bram.read(base_addr + 4)\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        latency = end - start\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        if latency > 0:\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"            entries.append((start, latency))\","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    waveform_data.append((name, entries))\","
+lappend notebook_data "\"\\n\","
+
+lappend notebook_data "\"fig, ax = plt.subplots(figsize=(12, 4)) \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"yticks = \[\] \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"yticklabels = \[\] \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"y_offset = 10 \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"bar_height = 6 \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"y = 0 \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"for name, segments in waveform_data: \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"    if segments: \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        ax.broken_barh(segments, (y, bar_height), facecolors='tab:blue') \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        yticks.append(y + bar_height / 2) \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        yticklabels.append(name) \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"        y += y_offset \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"ax.set_xlabel('Clock Cycles') \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"ax.set_yticks(yticks) \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"ax.set_yticklabels(yticklabels) \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"ax.grid(True) \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"ax.set_title(\\\"RealProbe Execution Timeline\\\") \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"plt.tight_layout() \","
+lappend notebook_data "\"\\n\","
+lappend notebook_data "\"plt.show() \","
+lappend notebook_data "\"\\n\""
 lappend notebook_data "\]"
 lappend notebook_data \}
 

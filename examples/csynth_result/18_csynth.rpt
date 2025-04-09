@@ -1,0 +1,218 @@
+
+
+================================================================
+== Synthesis Summary Report of 'loop_sequential'
+================================================================
++ General Information: 
+    * Date:           Fri May 17 11:06:20 2024
+    * Version:        2023.1.1 (Build 3869133 on Jun 15 2023)
+    * Project:        project
+    * Solution:       solution1 (Vivado IP Flow Target)
+    * Product family: zynq
+    * Target device:  xc7z020-clg400-1
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +-----------------------------------+------+------+---------+-----------+----------+---------+------+----------+--------+----+-----------+-----------+-----+
+    |              Modules              | Issue|      | Latency |  Latency  | Iteration|         | Trip |          |        |    |           |           |     |
+    |              & Loops              | Type | Slack| (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined|  BRAM  | DSP|     FF    |    LUT    | URAM|
+    +-----------------------------------+------+------+---------+-----------+----------+---------+------+----------+--------+----+-----------+-----------+-----+
+    |+ loop_sequential                  |     -|  0.00|      122|  1.220e+03|         -|      123|     -|        no|  8 (2%)|   -|  4274 (4%)|  4998 (9%)|    -|
+    | + loop_sequential_Pipeline_1      |     -|  0.00|       35|    350.000|         -|       35|     -|        no|       -|   -|   31 (~0%)|   77 (~0%)|    -|
+    |  o Loop 1                         |     -|  7.30|       33|    330.000|         3|        1|    32|       yes|       -|   -|          -|          -|    -|
+    | + loop_sequential_Pipeline_2      |     -|  0.00|       35|    350.000|         -|       35|     -|        no|       -|   -|   31 (~0%)|   77 (~0%)|    -|
+    |  o Loop 1                         |     -|  7.30|       33|    330.000|         3|        1|    32|       yes|       -|   -|          -|          -|    -|
+    | + loop_sequential_Pipeline_SUM_X  |     -|  0.98|       33|    330.000|         -|       33|     -|        no|       -|   -|   26 (~0%)|   87 (~0%)|    -|
+    |  o SUM_X                          |     -|  7.30|       31|    310.000|         2|        1|    31|       yes|       -|   -|          -|          -|    -|
+    | + loop_sequential_Pipeline_SUM_Y  |     -|  0.98|       33|    330.000|         -|       33|     -|        no|       -|   -|   26 (~0%)|   87 (~0%)|    -|
+    |  o SUM_Y                          |     -|  7.30|       31|    310.000|         2|        1|    31|       yes|       -|   -|          -|          -|    -|
+    | + loop_sequential_Pipeline_5      |     -|  0.00|       35|    350.000|         -|       35|     -|        no|       -|   -|   24 (~0%)|   77 (~0%)|    -|
+    |  o Loop 1                         |     -|  7.30|       33|    330.000|         3|        1|    32|       yes|       -|   -|          -|          -|    -|
+    | + loop_sequential_Pipeline_6      |     -|  0.00|       35|    350.000|         -|       35|     -|        no|       -|   -|   24 (~0%)|   77 (~0%)|    -|
+    |  o Loop 1                         |     -|  7.30|       33|    330.000|         3|        1|    32|       yes|       -|   -|          -|          -|    -|
+    +-----------------------------------+------+------+---------+-----------+----------+---------+------+----------+--------+----+-----------+-----------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| Interface    | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   | Resource Estimate |
+|              | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |                   |
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| m_axi_a_port | 8 -> 8     | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=2            |
+| m_axi_b_port | 8 -> 8     | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=2            |
+| m_axi_c_port | 13 -> 16   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=2            |
+| m_axi_d_port | 13 -> 16   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=2            |
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 7             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL     | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER     | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER   | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR   | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | A_1      | 0x10   | 32    | W      | Data signal of A                 |                                                                      |
+| s_axi_control | A_2      | 0x14   | 32    | W      | Data signal of A                 |                                                                      |
+| s_axi_control | B_1      | 0x1c   | 32    | W      | Data signal of B                 |                                                                      |
+| s_axi_control | B_2      | 0x20   | 32    | W      | Data signal of B                 |                                                                      |
+| s_axi_control | X_1      | 0x28   | 32    | W      | Data signal of X                 |                                                                      |
+| s_axi_control | X_2      | 0x2c   | 32    | W      | Data signal of X                 |                                                                      |
+| s_axi_control | Y_1      | 0x34   | 32    | W      | Data signal of Y                 |                                                                      |
+| s_axi_control | Y_2      | 0x38   | 32    | W      | Data signal of Y                 |                                                                      |
+| s_axi_control | xlimit   | 0x40   | 32    | W      | Data signal of xlimit            |                                                                      |
+| s_axi_control | ylimit   | 0x48   | 32    | W      | Data signal of ylimit            |                                                                      |
++---------------+----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+-------------+
+| Argument | Direction | Datatype    |
++----------+-----------+-------------+
+| A        | in        | ap_int<8>*  |
+| B        | in        | ap_int<8>*  |
+| X        | out       | ap_int<13>* |
+| Y        | out       | ap_int<13>* |
+| xlimit   | in        | ap_uint<5>  |
+| ylimit   | in        | ap_uint<5>  |
++----------+-----------+-------------+
+
+* SW-to-HW Mapping
++----------+---------------+-----------+----------+----------------------------------+
+| Argument | HW Interface  | HW Type   | HW Usage | HW Info                          |
++----------+---------------+-----------+----------+----------------------------------+
+| A        | m_axi_a_port  | interface |          |                                  |
+| A        | s_axi_control | register  | offset   | name=A_1 offset=0x10 range=32    |
+| A        | s_axi_control | register  | offset   | name=A_2 offset=0x14 range=32    |
+| B        | m_axi_b_port  | interface |          |                                  |
+| B        | s_axi_control | register  | offset   | name=B_1 offset=0x1c range=32    |
+| B        | s_axi_control | register  | offset   | name=B_2 offset=0x20 range=32    |
+| X        | m_axi_c_port  | interface |          |                                  |
+| X        | s_axi_control | register  | offset   | name=X_1 offset=0x28 range=32    |
+| X        | s_axi_control | register  | offset   | name=X_2 offset=0x2c range=32    |
+| Y        | m_axi_d_port  | interface |          |                                  |
+| Y        | s_axi_control | register  | offset   | name=Y_1 offset=0x34 range=32    |
+| Y        | s_axi_control | register  | offset   | name=Y_2 offset=0x38 range=32    |
+| xlimit   | s_axi_control | register  |          | name=xlimit offset=0x40 range=32 |
+| ylimit   | s_axi_control | register  |          | name=ylimit offset=0x48 range=32 |
++----------+---------------+-----------+----------+----------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* Inferred Burst Summary
++--------------+-----------+--------+-------+-----------+--------------------------+
+| HW Interface | Direction | Length | Width | Loop      | Loop Location            |
++--------------+-----------+--------+-------+-----------+--------------------------+
+| m_axi_a_port | read      | 32     | 8     | anonymous | loop_sequential.cpp:36:3 |
+| m_axi_b_port | read      | 32     | 8     | anonymous | loop_sequential.cpp:37:3 |
+| m_axi_c_port | write     | 32     | 16    | anonymous | loop_sequential.cpp:53:3 |
+| m_axi_d_port | write     | 32     | 16    | anonymous | loop_sequential.cpp:54:3 |
++--------------+-----------+--------+-------+-----------+--------------------------+
+
+* All M_AXI Variable Accesses
++--------------+----------+--------------------------+-----------+--------------+--------+-----------+--------------------------+------------+-------------------------------------------------------------------------------------------------------+
+| HW Interface | Variable | Access Location          | Direction | Burst Status | Length | Loop      | Loop Location            | Resolution | Problem                                                                                               |
++--------------+----------+--------------------------+-----------+--------------+--------+-----------+--------------------------+------------+-------------------------------------------------------------------------------------------------------+
+| m_axi_a_port | A        | loop_sequential.cpp:36:3 | read      | Widen Fail   |        | anonymous | loop_sequential.cpp:36:3 | 214-353    | Could not widen since type i8 size is greater than or equal to the max_widen_bitwidth threshold of 0  |
+| m_axi_a_port | A        | loop_sequential.cpp:36:3 | read      | Inferred     | 32     | anonymous | loop_sequential.cpp:36:3 |            |                                                                                                       |
+| m_axi_b_port | B        | loop_sequential.cpp:37:3 | read      | Widen Fail   |        | anonymous | loop_sequential.cpp:37:3 | 214-353    | Could not widen since type i8 size is greater than or equal to the max_widen_bitwidth threshold of 0  |
+| m_axi_b_port | B        | loop_sequential.cpp:37:3 | read      | Inferred     | 32     | anonymous | loop_sequential.cpp:37:3 |            |                                                                                                       |
+| m_axi_c_port | X        | loop_sequential.cpp:53:3 | write     | Widen Fail   |        | anonymous | loop_sequential.cpp:53:3 | 214-353    | Could not widen since type i16 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_c_port | X        | loop_sequential.cpp:53:3 | write     | Inferred     | 32     | anonymous | loop_sequential.cpp:53:3 |            |                                                                                                       |
+| m_axi_d_port | Y        | loop_sequential.cpp:54:3 | write     | Widen Fail   |        | anonymous | loop_sequential.cpp:54:3 | 214-353    | Could not widen since type i16 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_d_port | Y        | loop_sequential.cpp:54:3 | write     | Inferred     | 32     | anonymous | loop_sequential.cpp:54:3 |            |                                                                                                       |
++--------------+----------+--------------------------+-----------+--------------+--------+-----------+--------------------------+------------+-------------------------------------------------------------------------------------------------------+
+
+    * Resolution URL: www.xilinx.com/cgi-bin/docs/rdoc?v=2023.1;t=hls+guidance;d=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++-----------------------------------+-----+--------+-----------+-----+--------+---------+
+| Name                              | DSP | Pragma | Variable  | Op  | Impl   | Latency |
++-----------------------------------+-----+--------+-----------+-----+--------+---------+
+| + loop_sequential                 | 0   |        |           |     |        |         |
+|  + loop_sequential_Pipeline_1     | 0   |        |           |     |        |         |
+|    empty_fu_96_p2                 | -   |        | empty     | add | fabric | 0       |
+|  + loop_sequential_Pipeline_2     | 0   |        |           |     |        |         |
+|    empty_fu_96_p2                 | -   |        | empty     | add | fabric | 0       |
+|  + loop_sequential_Pipeline_SUM_X | 0   |        |           |     |        |         |
+|    add_ln43_fu_95_p2              | -   |        | add_ln43  | add | fabric | 0       |
+|    X_buff_d0                      | -   |        | X_accum_1 | add | fabric | 0       |
+|  + loop_sequential_Pipeline_SUM_Y | 0   |        |           |     |        |         |
+|    add_ln48_fu_95_p2              | -   |        | add_ln48  | add | fabric | 0       |
+|    Y_buff_d0                      | -   |        | Y_accum_1 | add | fabric | 0       |
+|  + loop_sequential_Pipeline_5     | 0   |        |           |     |        |         |
+|    empty_fu_105_p2                | -   |        | empty     | add | fabric | 0       |
+|  + loop_sequential_Pipeline_6     | 0   |        |           |     |        |         |
+|    empty_fu_105_p2                | -   |        | empty     | add | fabric | 0       |
++-----------------------------------+-----+--------+-----------+-----+--------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
++-------------------+------+------+--------+----------+---------+------+---------+
+| Name              | BRAM | URAM | Pragma | Variable | Storage | Impl | Latency |
++-------------------+------+------+--------+----------+---------+------+---------+
+| + loop_sequential | 8    | 0    |        |          |         |      |         |
+|   A_buff_U        | -    | -    |        | A_buff   | ram_1p  | auto | 1       |
+|   B_buff_U        | -    | -    |        | B_buff   | ram_1p  | auto | 1       |
+|   X_buff_U        | -    | -    |        | X_buff   | ram_1p  | auto | 1       |
+|   Y_buff_U        | -    | -    |        | Y_buff   | ram_1p  | auto | 1       |
++-------------------+------+------+--------+----------+---------+------+---------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Ignored Pragmas
++-----------+---------+-------------------------------------------+----------------------------+
+| Type      | Options | Location                                  | Messages                   |
++-----------+---------+-------------------------------------------+----------------------------+
+| realprobe |         | loop_sequential.cpp:29 in loop_sequential | unknown HLS pragma ignored |
++-----------+---------+-------------------------------------------+----------------------------+
+
+* Valid Pragma Syntax
++-----------+--------------------------------------------------------+---------------------------------------------------+
+| Type      | Options                                                | Location                                          |
++-----------+--------------------------------------------------------+---------------------------------------------------+
+| interface | m_axi port = A depth=32 offset = slave bundle = a_port | loop_sequential.cpp:22 in loop_sequential         |
+| interface | m_axi port = B depth=32 offset = slave bundle = b_port | loop_sequential.cpp:23 in loop_sequential         |
+| interface | m_axi port = X depth=32 offset = slave bundle = c_port | loop_sequential.cpp:24 in loop_sequential         |
+| interface | m_axi port = Y depth=32 offset = slave bundle = d_port | loop_sequential.cpp:25 in loop_sequential         |
+| interface | s_axilite port=xlimit                                  | loop_sequential.cpp:26 in loop_sequential, xlimit |
+| interface | s_axilite port=ylimit                                  | loop_sequential.cpp:27 in loop_sequential, ylimit |
+| interface | s_axilite register port=return                         | loop_sequential.cpp:28 in loop_sequential, return |
++-----------+--------------------------------------------------------+---------------------------------------------------+
+
+

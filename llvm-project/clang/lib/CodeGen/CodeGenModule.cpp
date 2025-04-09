@@ -1052,6 +1052,8 @@ static bool hasUnwindExceptions(const LangOptions &LangOpts) {
   return true;
 }
 
+// extern bool ForceNoInline = true;
+
 void CodeGenModule::SetLLVMFunctionAttributesForDefinition(const Decl *D,
                                                            llvm::Function *F) {
   llvm::AttrBuilder B;
@@ -1069,25 +1071,55 @@ void CodeGenModule::SetLLVMFunctionAttributesForDefinition(const Decl *D,
   else if (LangOpts.getStackProtector() == LangOptions::SSPReq)
     B.addAttribute(llvm::Attribute::StackProtectReq);
 
-  B.addAttribute(llvm::Attribute::NoInline);
+  // Debug output for logging
+  llvm::errs() << "Processing function: " << F->getName() << "\n";
+
+  // // Handle the noinline and alwaysinline conflict
+  // if (!D || D->hasAttr<NoInlineAttr>()) {
+  //   // If no declaration or explicitly marked noinline
+  //   if (F->hasFnAttribute(llvm::Attribute::AlwaysInline)) {
+  //     llvm::errs() << "Removing AlwaysInline from: " << F->getName() << "\n";
+  //     F->removeFnAttr(llvm::Attribute::AlwaysInline);
+  //   }
+  //   B.addAttribute(llvm::Attribute::NoInline);
+  // } else if (D->hasAttr<AlwaysInlineAttr>()) {
+  //   // If explicitly marked alwaysinline, ensure no noinline
+  //   if (!F->hasFnAttribute(llvm::Attribute::NoInline)) {
+  //     llvm::errs() << "Adding AlwaysInline to: " << F->getName() << "\n";
+  //     B.addAttribute(llvm::Attribute::AlwaysInline);
+  //   }
+  // }
+
+  // Preserve AlwaysInline for inline and template functions
+  if (F->hasFnAttribute(llvm::Attribute::AlwaysInline) && (!D || !D->hasAttr<NoInlineAttr>())) {
+      llvm::errs() << "Preserving AlwaysInline for: " << F->getName() << "\n";
+      B.addAttribute(llvm::Attribute::AlwaysInline);
+  } else if (D && D->hasAttr<NoInlineAttr>()) {
+      llvm::errs() << "Applying NoInline for: " << F->getName() << "\n";
+      F->removeFnAttr(llvm::Attribute::AlwaysInline);
+      B.addAttribute(llvm::Attribute::NoInline);
+  }
+
 
   if (!D) {
     // If we don't have a declaration to control inlining, the function isn't
     // explicitly marked as alwaysinline for semantic reasons, and inlining is
     // disabled, mark the function as noinline.
-    // if (!F->hasFnAttribute(llvm::Attribute::AlwaysInline) &&
-    //     CodeGenOpts.getInlining() == CodeGenOptions::OnlyAlwaysInlining)
+    if (F->hasFnAttribute(llvm::Attribute::AlwaysInline)) {
+      llvm::errs() << "Removing AlwaysInline from compiler-generated function: "
+                   << F->getName() << "\n";
+      F->removeFnAttr(llvm::Attribute::AlwaysInline);
+    }
     B.addAttribute(llvm::Attribute::NoInline);
 
     F->addAttributes(llvm::AttributeList::FunctionIndex, B);
     return;
   }
 
-  // Track whether we need to add the optnone LLVM attribute,
-  // starting with the default for this optimization level.
+  // Track whether we need to add the optnone LLVM attribute
   bool ShouldAddOptNone =
       !CodeGenOpts.DisableO0ImplyOptNone && CodeGenOpts.OptimizationLevel == 0;
-  // We can't add optnone in the following cases, it won't pass the verifier.
+
   ShouldAddOptNone &= !D->hasAttr<MinSizeAttr>();
   ShouldAddOptNone &= !F->hasFnAttribute(llvm::Attribute::AlwaysInline);
   ShouldAddOptNone &= !D->hasAttr<AlwaysInlineAttr>();
@@ -1097,19 +1129,20 @@ void CodeGenModule::SetLLVMFunctionAttributesForDefinition(const Decl *D,
 
     // OptimizeNone implies noinline; we should not be inlining such functions.
     B.addAttribute(llvm::Attribute::NoInline);
-    // assert(!F->hasFnAttribute(llvm::Attribute::AlwaysInline) &&
-    //        "OptimizeNone and AlwaysInline on same function!");
 
-    // We still need to handle naked functions even though optnone subsumes
-    // much of their semantics.
-    if (D->hasAttr<NakedAttr>())
-      B.addAttribute(llvm::Attribute::Naked);
+    // Remove alwaysinline to avoid conflict
+    if (F->hasFnAttribute(llvm::Attribute::AlwaysInline)) {
+      llvm::errs() << "Removing AlwaysInline due to OptimizeNone: "
+                   << F->getName() << "\n";
+      F->removeFnAttr(llvm::Attribute::AlwaysInline);
+    }
 
-    // OptimizeNone wins over OptimizeForSize and MinSize.
+    assert(!F->hasFnAttribute(llvm::Attribute::AlwaysInline) &&
+           "OptimizeNone and AlwaysInline on same function!");
+
     F->removeFnAttr(llvm::Attribute::OptimizeForSize);
     F->removeFnAttr(llvm::Attribute::MinSize);
   } else if (D->hasAttr<NakedAttr>()) {
-    // Naked implies noinline: we should not be inlining such functions.
     B.addAttribute(llvm::Attribute::Naked);
     B.addAttribute(llvm::Attribute::NoInline);
   } else if (D->hasAttr<NoDuplicateAttr>()) {
@@ -1118,16 +1151,11 @@ void CodeGenModule::SetLLVMFunctionAttributesForDefinition(const Decl *D,
     B.addAttribute(llvm::Attribute::NoInline);
   } else if (D->hasAttr<AlwaysInlineAttr>() &&
              !F->hasFnAttribute(llvm::Attribute::NoInline)) {
-    // (noinline wins over always_inline, and we can't specify both in IR)
     B.addAttribute(llvm::Attribute::AlwaysInline);
   } else if (CodeGenOpts.getInlining() == CodeGenOptions::OnlyAlwaysInlining) {
-    // If we're not inlining, then force everything that isn't always_inline to
-    // carry an explicit noinline attribute.
     if (!F->hasFnAttribute(llvm::Attribute::AlwaysInline))
       B.addAttribute(llvm::Attribute::NoInline);
   } else {
-    // Otherwise, propagate the inline hint attribute and potentially use its
-    // absence to mark things as noinline.
     if (auto *FD = dyn_cast<FunctionDecl>(D)) {
       if (any_of(FD->redecls(), [&](const FunctionDecl *Redecl) {
             return Redecl->isInlineSpecified();
@@ -1142,8 +1170,6 @@ void CodeGenModule::SetLLVMFunctionAttributesForDefinition(const Decl *D,
     }
   }
 
-  // Add other optimization related attributes if we are optimizing this
-  // function.
   if (!D->hasAttr<OptimizeNoneAttr>()) {
     if (D->hasAttr<ColdAttr>()) {
       if (!ShouldAddOptNone)
@@ -1161,20 +1187,163 @@ void CodeGenModule::SetLLVMFunctionAttributesForDefinition(const Decl *D,
   if (alignment)
     F->setAlignment(alignment);
 
-  // Some C++ ABIs require 2-byte alignment for member functions, in order to
-  // reserve a bit for differentiating between virtual and non-virtual member
-  // functions. If the current target's C++ ABI requires this and this is a
-  // member function, set its alignment accordingly.
   if (getTarget().getCXXABI().areMemberFunctionsAligned()) {
     if (F->getAlignment() < 2 && isa<CXXMethodDecl>(D))
       F->setAlignment(2);
   }
 
-  // In the cross-dso CFI mode, we want !type attributes on definitions only.
   if (CodeGenOpts.SanitizeCfiCrossDso)
     if (auto *FD = dyn_cast<FunctionDecl>(D))
       CreateFunctionTypeMetadata(FD, F);
 }
+
+
+// void CodeGenModule::SetLLVMFunctionAttributesForDefinition(const Decl *D,
+//                                                            llvm::Function *F) {
+//   llvm::AttrBuilder B;
+
+//   if (CodeGenOpts.UnwindTables)
+//     B.addAttribute(llvm::Attribute::UWTable);
+
+//   if (!hasUnwindExceptions(LangOpts))
+//     B.addAttribute(llvm::Attribute::NoUnwind);
+
+//   if (LangOpts.getStackProtector() == LangOptions::SSPOn)
+//     B.addAttribute(llvm::Attribute::StackProtect);
+//   else if (LangOpts.getStackProtector() == LangOptions::SSPStrong)
+//     B.addAttribute(llvm::Attribute::StackProtectStrong);
+//   else if (LangOpts.getStackProtector() == LangOptions::SSPReq)
+//     B.addAttribute(llvm::Attribute::StackProtectReq);
+
+
+//   // B.addAttribute(llvm::Attribute::NoInline);
+//   // Handle the noinline and alwaysinline conflict
+//   if (!D || D->hasAttr<NoInlineAttr>()) {
+//     // If no declaration or explicitly marked noinline
+//     if (F->hasFnAttribute(llvm::Attribute::AlwaysInline)) {
+//       F->removeFnAttr(llvm::Attribute::AlwaysInline);
+//     }
+//     B.addAttribute(llvm::Attribute::NoInline);
+//   } else if (D->hasAttr<AlwaysInlineAttr>()) {
+//     // If explicitly marked alwaysinline, ensure no noinline
+//     if (!F->hasFnAttribute(llvm::Attribute::NoInline)) {
+//       B.addAttribute(llvm::Attribute::AlwaysInline);
+//     }
+//   }
+
+
+//   if (!D) {
+//     // If we don't have a declaration to control inlining, the function isn't
+//     // explicitly marked as alwaysinline for semantic reasons, and inlining is
+//     // disabled, mark the function as noinline.
+//     // if (!F->hasFnAttribute(llvm::Attribute::AlwaysInline) &&
+//     //     CodeGenOpts.getInlining() == CodeGenOptions::OnlyAlwaysInlining)
+//     if (F->hasFnAttribute(llvm::Attribute::AlwaysInline)) {
+//         F->removeFnAttr(llvm::Attribute::AlwaysInline);
+//     }
+//     B.addAttribute(llvm::Attribute::NoInline);
+
+//     F->addAttributes(llvm::AttributeList::FunctionIndex, B);
+//     return;
+//   }
+
+//   // Track whether we need to add the optnone LLVM attribute,
+//   // starting with the default for this optimization level.
+//   bool ShouldAddOptNone =
+//       !CodeGenOpts.DisableO0ImplyOptNone && CodeGenOpts.OptimizationLevel == 0;
+//   // We can't add optnone in the following cases, it won't pass the verifier.
+//   ShouldAddOptNone &= !D->hasAttr<MinSizeAttr>();
+//   ShouldAddOptNone &= !F->hasFnAttribute(llvm::Attribute::AlwaysInline);
+//   ShouldAddOptNone &= !D->hasAttr<AlwaysInlineAttr>();
+
+//   if (ShouldAddOptNone || D->hasAttr<OptimizeNoneAttr>()) {
+//     B.addAttribute(llvm::Attribute::OptimizeNone);
+
+//     // OptimizeNone implies noinline; we should not be inlining such functions.
+//     B.addAttribute(llvm::Attribute::NoInline);
+//     // Remove alwaysinline to avoid conflict
+//     if (F->hasFnAttribute(llvm::Attribute::AlwaysInline)) {
+//         F->removeFnAttr(llvm::Attribute::AlwaysInline);
+//     }
+
+//     assert(!F->hasFnAttribute(llvm::Attribute::AlwaysInline) &&
+//            "OptimizeNone and AlwaysInline on same function!");
+
+//     // We still need to handle naked functions even though optnone subsumes
+//     // much of their semantics.
+//     if (D->hasAttr<NakedAttr>())
+//       B.addAttribute(llvm::Attribute::Naked);
+
+//     // OptimizeNone wins over OptimizeForSize and MinSize.
+//     F->removeFnAttr(llvm::Attribute::OptimizeForSize);
+//     F->removeFnAttr(llvm::Attribute::MinSize);
+//   } else if (D->hasAttr<NakedAttr>()) {
+//     // Naked implies noinline: we should not be inlining such functions.
+//     B.addAttribute(llvm::Attribute::Naked);
+//     B.addAttribute(llvm::Attribute::NoInline);
+//   } else if (D->hasAttr<NoDuplicateAttr>()) {
+//     B.addAttribute(llvm::Attribute::NoDuplicate);
+//   } else if (D->hasAttr<NoInlineAttr>()) {
+//     B.addAttribute(llvm::Attribute::NoInline);
+//   } else if (D->hasAttr<AlwaysInlineAttr>() &&
+//              !F->hasFnAttribute(llvm::Attribute::NoInline)) {
+//     // (noinline wins over always_inline, and we can't specify both in IR)
+//     B.addAttribute(llvm::Attribute::AlwaysInline);
+//   } else if (CodeGenOpts.getInlining() == CodeGenOptions::OnlyAlwaysInlining) {
+//     // If we're not inlining, then force everything that isn't always_inline to
+//     // carry an explicit noinline attribute.
+//     if (!F->hasFnAttribute(llvm::Attribute::AlwaysInline))
+//       B.addAttribute(llvm::Attribute::NoInline);
+//   } else {
+//     // Otherwise, propagate the inline hint attribute and potentially use its
+//     // absence to mark things as noinline.
+//     if (auto *FD = dyn_cast<FunctionDecl>(D)) {
+//       if (any_of(FD->redecls(), [&](const FunctionDecl *Redecl) {
+//             return Redecl->isInlineSpecified();
+//           })) {
+//         B.addAttribute(llvm::Attribute::InlineHint);
+//       } else if (CodeGenOpts.getInlining() ==
+//                      CodeGenOptions::OnlyHintInlining &&
+//                  !FD->isInlined() &&
+//                  !F->hasFnAttribute(llvm::Attribute::AlwaysInline)) {
+//         B.addAttribute(llvm::Attribute::NoInline);
+//       }
+//     }
+//   }
+
+//   // Add other optimization related attributes if we are optimizing this
+//   // function.
+//   if (!D->hasAttr<OptimizeNoneAttr>()) {
+//     if (D->hasAttr<ColdAttr>()) {
+//       if (!ShouldAddOptNone)
+//         B.addAttribute(llvm::Attribute::OptimizeForSize);
+//       B.addAttribute(llvm::Attribute::Cold);
+//     }
+
+//     if (D->hasAttr<MinSizeAttr>())
+//       B.addAttribute(llvm::Attribute::MinSize);
+//   }
+
+//   F->addAttributes(llvm::AttributeList::FunctionIndex, B);
+
+//   unsigned alignment = D->getMaxAlignment() / Context.getCharWidth();
+//   if (alignment)
+//     F->setAlignment(alignment);
+
+//   // Some C++ ABIs require 2-byte alignment for member functions, in order to
+//   // reserve a bit for differentiating between virtual and non-virtual member
+//   // functions. If the current target's C++ ABI requires this and this is a
+//   // member function, set its alignment accordingly.
+//   if (getTarget().getCXXABI().areMemberFunctionsAligned()) {
+//     if (F->getAlignment() < 2 && isa<CXXMethodDecl>(D))
+//       F->setAlignment(2);
+//   }
+
+//   // In the cross-dso CFI mode, we want !type attributes on definitions only.
+//   if (CodeGenOpts.SanitizeCfiCrossDso)
+//     if (auto *FD = dyn_cast<FunctionDecl>(D))
+//       CreateFunctionTypeMetadata(FD, F);
+// }
 
 void CodeGenModule::SetCommonAttributes(const Decl *D,
                                         llvm::GlobalValue *GV) {

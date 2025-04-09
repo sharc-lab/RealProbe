@@ -161,11 +161,13 @@ return 1
         puts $file "endgroup"
     }
 
-    puts $file "set_property -dict \[list \\"
-    for {set i 0} {$i < $numMaxi} {incr i} {
-        puts $file "  CONFIG.PCW_USE_S_AXI_HP$i {1} \\"
+    if {$numMaxi > 0} {
+        puts $file "set_property -dict \[list \\"
+        for {set i 0} {$i < $numMaxi} {incr i} {
+            puts $file "  CONFIG.PCW_USE_S_AXI_HP$i {1} \\"
+        }
+        puts $file "\] \[get_bd_cells processing_system7_0\]"
     }
-    puts $file "\] \[get_bd_cells processing_system7_0\]"
 
     puts $file "startgroup"
     puts $file "apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config { Clk_master {Auto} Clk_slave {Auto} Clk_xbar {Auto} Master {/processing_system7_0/M_AXI_GP0} Slave {/${userIP}_0/s_axi_control} ddr_seg {Auto} intc_ip {New AXI Interconnect} master_apm {0}} \[get_bd_intf_pins ${userIP}_0/s_axi_control\]"
@@ -188,6 +190,11 @@ return 1
         puts $file "endgroup"
         
         set apsignals [readAndRememberLines [file join $solPath "rprobe" "apstart_signals.txt"]]
+        foreach signal $apsignals {
+            puts $file "connect_bd_net \[get_bd_pins ${userIP}_0/$signal\] \[get_bd_pins realprobe_ip_0/$signal\]"
+        }
+
+        set apsignals [readAndRememberLines [file join $solPath "rprobe" "apdone_signals.txt"]]
         foreach signal $apsignals {
             puts $file "connect_bd_net \[get_bd_pins ${userIP}_0/$signal\] \[get_bd_pins realprobe_ip_0/$signal\]"
         }
@@ -217,6 +224,11 @@ return 1
     puts $file "reset_runs synth_1"
     puts $file "launch_runs impl_1 -to_step write_bitstream -jobs 4"
     puts $file "wait_on_run impl_1"
+
+
+    puts $file "open_run impl_1"
+    puts $file "report_utilization -hierarchical -file ./rpt_util.txt"
+
     puts $file "close_project"
     puts $file "exit"
 

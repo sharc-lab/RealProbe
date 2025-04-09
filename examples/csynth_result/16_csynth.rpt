@@ -1,0 +1,273 @@
+
+
+================================================================
+== Synthesis Summary Report of 'matrixmul'
+================================================================
++ General Information: 
+    * Date:           Thu May 16 14:22:31 2024
+    * Version:        2023.1.1 (Build 3869133 on Jun 15 2023)
+    * Project:        project
+    * Solution:       solution1 (Vivado IP Flow Target)
+    * Product family: zynq
+    * Target device:  xc7z020-clg400-1
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +----------------------------+--------+-------+---------+-----------+----------+---------+------+----------+---------+--------+-----------+------------+-----+
+    |           Modules          |  Issue |       | Latency |  Latency  | Iteration|         | Trip |          |         |        |           |            |     |
+    |           & Loops          |  Type  | Slack | (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined|  BRAM   |   DSP  |     FF    |     LUT    | URAM|
+    +----------------------------+--------+-------+---------+-----------+----------+---------+------+----------+---------+--------+-----------+------------+-----+
+    |+ matrixmul                 |  Timing|  -0.71|    34446|  3.445e+05|         -|    34447|     -|        no|  12 (4%)|  3 (1%)|  9749 (9%)|  8728 (16%)|    -|
+    | o row                      |       -|   7.30|    34432|  3.443e+05|      1076|        -|    32|        no|        -|       -|          -|           -|    -|
+    |  + matrixmul_Pipeline_col  |  Timing|  -0.71|     1041|  1.041e+04|         -|     1041|     -|        no|        -|  3 (1%)|  3759 (3%)|   3528 (6%)|    -|
+    |   o col                    |      II|   7.30|     1039|  1.039e+04|        48|       32|    32|       yes|        -|       -|          -|           -|    -|
+    +----------------------------+--------+-------+---------+-----------+----------+---------+------+----------+---------+--------+-----------+------------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++---------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| Interface     | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   | Resource Estimate |
+|               | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |                   |
++---------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| m_axi_a_port  | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=4            |
+| m_axi_ab_port | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=4            |
+| m_axi_b_port  | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=4            |
++---------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 6             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL     | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER     | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER   | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR   | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | A_1      | 0x10   | 32    | W      | Data signal of A                 |                                                                      |
+| s_axi_control | A_2      | 0x14   | 32    | W      | Data signal of A                 |                                                                      |
+| s_axi_control | B_1      | 0x1c   | 32    | W      | Data signal of B                 |                                                                      |
+| s_axi_control | B_2      | 0x20   | 32    | W      | Data signal of B                 |                                                                      |
+| s_axi_control | AB_1     | 0x28   | 32    | W      | Data signal of AB                |                                                                      |
+| s_axi_control | AB_2     | 0x2c   | 32    | W      | Data signal of AB                |                                                                      |
++---------------+----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+----------+
+| Argument | Direction | Datatype |
++----------+-----------+----------+
+| A        | in        | int*     |
+| B        | in        | int*     |
+| AB       | out       | int*     |
++----------+-----------+----------+
+
+* SW-to-HW Mapping
++----------+---------------+-----------+----------+--------------------------------+
+| Argument | HW Interface  | HW Type   | HW Usage | HW Info                        |
++----------+---------------+-----------+----------+--------------------------------+
+| A        | m_axi_a_port  | interface |          |                                |
+| A        | s_axi_control | register  | offset   | name=A_1 offset=0x10 range=32  |
+| A        | s_axi_control | register  | offset   | name=A_2 offset=0x14 range=32  |
+| B        | m_axi_b_port  | interface |          |                                |
+| B        | s_axi_control | register  | offset   | name=B_1 offset=0x1c range=32  |
+| B        | s_axi_control | register  | offset   | name=B_2 offset=0x20 range=32  |
+| AB       | m_axi_ab_port | interface |          |                                |
+| AB       | s_axi_control | register  | offset   | name=AB_1 offset=0x28 range=32 |
+| AB       | s_axi_control | register  | offset   | name=AB_2 offset=0x2c range=32 |
++----------+---------------+-----------+----------+--------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* Inferred Burst Summary
++---------------+-----------+--------+-------+------+-------------------------------+
+| HW Interface  | Direction | Length | Width | Loop | Loop Location                 |
++---------------+-----------+--------+-------+------+-------------------------------+
+| m_axi_a_port  | read      | 1024   | 32    | row  | matrixmultiplication.cpp:16:7 |
+| m_axi_ab_port | write     | 1024   | 32    | row  | matrixmultiplication.cpp:16:7 |
++---------------+-----------+--------+-------+------+-------------------------------+
+
+* All M_AXI Variable Accesses
++---------------+----------+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+--------+------+--------------------------------+------------+-------------------------------------------------------------------------------------------------------+
+| HW Interface  | Variable | Access Location                | Direction                                                                                                                                                              | Burst Status | Length | Loop | Loop Location                  | Resolution | Problem                                                                                               |
++---------------+----------+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+--------+------+--------------------------------+------------+-------------------------------------------------------------------------------------------------------+
+| m_axi_a_port  | A        | matrixmultiplication.cpp:16:7  | read                                                                                                                                                                   | Widen Fail   |        | row  | matrixmultiplication.cpp:16:7  | 214-353    | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_a_port  | A        | matrixmultiplication.cpp:16:7  | islist read read read read read read read read read read read read read read read read read read read read read read read read read read read read read read read read | Inferred     | 1024   | row  | matrixmultiplication.cpp:16:7  |            |                                                                                                       |
+| m_axi_ab_port | AB       | matrixmultiplication.cpp:24:16 | write                                                                                                                                                                  | Widen Fail   |        | col  | matrixmultiplication.cpp:17:10 | 214-353    | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_ab_port | AB       | matrixmultiplication.cpp:24:16 | write                                                                                                                                                                  | Inferred     | 1024   | row  | matrixmultiplication.cpp:16:7  |            |                                                                                                       |
+| m_axi_b_port  |          | matrixmultiplication.cpp:17:10 | read                                                                                                                                                                   | Fail         |        |      |                                | 214-224    | Could not burst due to multiple potential reads to the same bundle in the same region.                |
+| m_axi_b_port  | B        | matrixmultiplication.cpp:22:27 | read                                                                                                                                                                   | Widen Fail   |        | col  | matrixmultiplication.cpp:17:10 | 214-353    | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_b_port  | B        | matrixmultiplication.cpp:22:27 | read                                                                                                                                                                   | Inferred     | 32     | col  | matrixmultiplication.cpp:17:10 |            |                                                                                                       |
++---------------+----------+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+--------+------+--------------------------------+------------+-------------------------------------------------------------------------------------------------------+
+
+    * Resolution URL: www.xilinx.com/cgi-bin/docs/rdoc?v=2023.1;t=hls+guidance;d=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++---------------------------+-----+--------+-------------+-----+--------+---------+
+| Name                      | DSP | Pragma | Variable    | Op  | Impl   | Latency |
++---------------------------+-----+--------+-------------+-----+--------+---------+
+| + matrixmul               | 3   |        |             |     |        |         |
+|   add_ln16_fu_310_p2      | -   |        | add_ln16    | add | fabric | 0       |
+|   add_ln16_1_fu_315_p2    | -   |        | add_ln16_1  | add | fabric | 0       |
+|   add_ln16_2_fu_320_p2    | -   |        | add_ln16_2  | add | fabric | 0       |
+|   add_ln16_3_fu_325_p2    | -   |        | add_ln16_3  | add | fabric | 0       |
+|   add_ln16_4_fu_330_p2    | -   |        | add_ln16_4  | add | fabric | 0       |
+|   add_ln16_5_fu_335_p2    | -   |        | add_ln16_5  | add | fabric | 0       |
+|   add_ln16_6_fu_340_p2    | -   |        | add_ln16_6  | add | fabric | 0       |
+|   add_ln16_7_fu_345_p2    | -   |        | add_ln16_7  | add | fabric | 0       |
+|   add_ln16_8_fu_350_p2    | -   |        | add_ln16_8  | add | fabric | 0       |
+|   add_ln16_9_fu_355_p2    | -   |        | add_ln16_9  | add | fabric | 0       |
+|   add_ln16_10_fu_360_p2   | -   |        | add_ln16_10 | add | fabric | 0       |
+|   add_ln16_11_fu_365_p2   | -   |        | add_ln16_11 | add | fabric | 0       |
+|   add_ln16_12_fu_370_p2   | -   |        | add_ln16_12 | add | fabric | 0       |
+|   add_ln16_13_fu_375_p2   | -   |        | add_ln16_13 | add | fabric | 0       |
+|   add_ln16_14_fu_380_p2   | -   |        | add_ln16_14 | add | fabric | 0       |
+|   add_ln16_15_fu_385_p2   | -   |        | add_ln16_15 | add | fabric | 0       |
+|   add_ln16_16_fu_390_p2   | -   |        | add_ln16_16 | add | fabric | 0       |
+|   add_ln16_17_fu_395_p2   | -   |        | add_ln16_17 | add | fabric | 0       |
+|   add_ln16_18_fu_400_p2   | -   |        | add_ln16_18 | add | fabric | 0       |
+|   add_ln16_19_fu_405_p2   | -   |        | add_ln16_19 | add | fabric | 0       |
+|   add_ln16_20_fu_410_p2   | -   |        | add_ln16_20 | add | fabric | 0       |
+|   add_ln16_21_fu_415_p2   | -   |        | add_ln16_21 | add | fabric | 0       |
+|   add_ln16_22_fu_420_p2   | -   |        | add_ln16_22 | add | fabric | 0       |
+|   add_ln16_23_fu_425_p2   | -   |        | add_ln16_23 | add | fabric | 0       |
+|   add_ln16_24_fu_430_p2   | -   |        | add_ln16_24 | add | fabric | 0       |
+|   add_ln16_25_fu_435_p2   | -   |        | add_ln16_25 | add | fabric | 0       |
+|   add_ln16_26_fu_440_p2   | -   |        | add_ln16_26 | add | fabric | 0       |
+|   add_ln16_27_fu_445_p2   | -   |        | add_ln16_27 | add | fabric | 0       |
+|   add_ln16_28_fu_450_p2   | -   |        | add_ln16_28 | add | fabric | 0       |
+|   add_ln16_29_fu_455_p2   | -   |        | add_ln16_29 | add | fabric | 0       |
+|   add_ln16_30_fu_460_p2   | -   |        | add_ln16_30 | add | fabric | 0       |
+|   add_ln16_31_fu_794_p2   | -   |        | add_ln16_31 | add | fabric | 0       |
+|  + matrixmul_Pipeline_col | 3   |        |             |     |        |         |
+|    add_ln17_fu_1186_p2    | -   |        | add_ln17    | add | fabric | 0       |
+|    add_ln22_fu_1196_p2    | -   |        | add_ln22    | add | fabric | 0       |
+|    add_ln22_1_fu_1212_p2  | -   |        | add_ln22_1  | add | fabric | 0       |
+|    add_ln22_2_fu_1228_p2  | -   |        | add_ln22_2  | add | fabric | 0       |
+|    add_ln22_3_fu_1244_p2  | -   |        | add_ln22_3  | add | fabric | 0       |
+|    add_ln22_4_fu_1260_p2  | -   |        | add_ln22_4  | add | fabric | 0       |
+|    add_ln22_5_fu_1276_p2  | -   |        | add_ln22_5  | add | fabric | 0       |
+|    add_ln22_6_fu_1292_p2  | -   |        | add_ln22_6  | add | fabric | 0       |
+|    add_ln22_7_fu_1308_p2  | -   |        | add_ln22_7  | add | fabric | 0       |
+|    add_ln22_8_fu_1324_p2  | -   |        | add_ln22_8  | add | fabric | 0       |
+|    add_ln22_9_fu_1340_p2  | -   |        | add_ln22_9  | add | fabric | 0       |
+|    add_ln22_10_fu_1356_p2 | -   |        | add_ln22_10 | add | fabric | 0       |
+|    add_ln22_11_fu_1372_p2 | -   |        | add_ln22_11 | add | fabric | 0       |
+|    add_ln22_12_fu_1388_p2 | -   |        | add_ln22_12 | add | fabric | 0       |
+|    add_ln22_13_fu_1404_p2 | -   |        | add_ln22_13 | add | fabric | 0       |
+|    add_ln22_14_fu_1420_p2 | -   |        | add_ln22_14 | add | fabric | 0       |
+|    add_ln22_15_fu_1436_p2 | -   |        | add_ln22_15 | add | fabric | 0       |
+|    add_ln22_16_fu_1452_p2 | -   |        | add_ln22_16 | add | fabric | 0       |
+|    add_ln22_17_fu_1468_p2 | -   |        | add_ln22_17 | add | fabric | 0       |
+|    add_ln22_18_fu_1484_p2 | -   |        | add_ln22_18 | add | fabric | 0       |
+|    add_ln22_19_fu_1500_p2 | -   |        | add_ln22_19 | add | fabric | 0       |
+|    add_ln22_20_fu_1516_p2 | -   |        | add_ln22_20 | add | fabric | 0       |
+|    add_ln22_21_fu_1532_p2 | -   |        | add_ln22_21 | add | fabric | 0       |
+|    add_ln22_22_fu_1548_p2 | -   |        | add_ln22_22 | add | fabric | 0       |
+|    add_ln22_23_fu_1564_p2 | -   |        | add_ln22_23 | add | fabric | 0       |
+|    add_ln22_24_fu_1580_p2 | -   |        | add_ln22_24 | add | fabric | 0       |
+|    add_ln22_25_fu_1596_p2 | -   |        | add_ln22_25 | add | fabric | 0       |
+|    add_ln22_26_fu_1612_p2 | -   |        | add_ln22_26 | add | fabric | 0       |
+|    add_ln22_27_fu_1628_p2 | -   |        | add_ln22_27 | add | fabric | 0       |
+|    add_ln22_28_fu_1644_p2 | -   |        | add_ln22_28 | add | fabric | 0       |
+|    add_ln22_29_fu_1660_p2 | -   |        | add_ln22_29 | add | fabric | 0       |
+|    add_ln22_30_fu_1676_p2 | -   |        | add_ln22_30 | add | fabric | 0       |
+|    add_ln22_31_fu_1692_p2 | -   |        | add_ln22_31 | add | fabric | 0       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22    | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_1  | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_2  | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_3  | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_4  | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_5  | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_6  | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_7  | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_8  | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_9  | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_10 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_11 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_12 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_13 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_14 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_15 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_16 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_17 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_18 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_19 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_20 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_21 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_22 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_23 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_24 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_25 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_26 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_27 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_28 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_29 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_30 | mul | auto   | 1       |
+|    mul_32s_32s_32_2_1_U1  | 3   |        | mul_ln22_31 | mul | auto   | 1       |
+|    add_ln22_32_fu_1713_p2 | -   |        | add_ln22_32 | add | fabric | 0       |
+|    grp_fu_992_p2          | -   |        | add_ln22_33 | add | fabric | 0       |
+|    grp_fu_1004_p2         | -   |        | add_ln22_36 | add | fabric | 0       |
+|    grp_fu_992_p2          | -   |        | add_ln22_39 | add | fabric | 0       |
+|    grp_fu_992_p2          | -   |        | add_ln22_40 | add | fabric | 0       |
+|    grp_fu_1004_p2         | -   |        | add_ln22_43 | add | fabric | 0       |
+|    grp_fu_1004_p2         | -   |        | add_ln22_48 | add | fabric | 0       |
+|    grp_fu_1004_p2         | -   |        | add_ln22_51 | add | fabric | 0       |
+|    grp_fu_992_p2          | -   |        | add_ln22_54 | add | fabric | 0       |
+|    grp_fu_992_p2          | -   |        | add_ln22_55 | add | fabric | 0       |
+|    grp_fu_1004_p2         | -   |        | add_ln22_58 | add | fabric | 0       |
++---------------------------+-----+--------+-------------+-----+--------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
+  No bind storage info in design
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++---------------+------------------------------------------------------------+--------------------------------------------------+
+| Type          | Options                                                    | Location                                         |
++---------------+------------------------------------------------------------+--------------------------------------------------+
+| interface     | m_axi port = A depth=1024 offset = slave bundle = a_port   | matrixmultiplication.cpp:7 in matrixmul          |
+| interface     | m_axi port = B depth=1024 offset = slave bundle = b_port   | matrixmultiplication.cpp:8 in matrixmul          |
+| interface     | m_axi port = AB depth=1024 offset = slave bundle = ab_port | matrixmultiplication.cpp:9 in matrixmul          |
+| interface     | s_axilite register port=return                             | matrixmultiplication.cpp:10 in matrixmul, return |
+| realprobe     |                                                            | matrixmultiplication.cpp:11 in matrixmul         |
+| array_reshape | variable=A complete dim=2                                  | matrixmultiplication.cpp:13 in matrixmul, A      |
+| array_reshape | variable=B complete dim=1                                  | matrixmultiplication.cpp:14 in matrixmul, B      |
+| pipeline      | II=1                                                       | matrixmultiplication.cpp:18 in matrixmul         |
++---------------+------------------------------------------------------------+--------------------------------------------------+
+
+

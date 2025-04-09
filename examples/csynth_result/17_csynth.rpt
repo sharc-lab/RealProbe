@@ -1,0 +1,194 @@
+
+
+================================================================
+== Synthesis Summary Report of 'merge_sort_parallel'
+================================================================
++ General Information: 
+    * Date:           Thu May 16 13:23:31 2024
+    * Version:        2023.1.1 (Build 3869133 on Jun 15 2023)
+    * Project:        project
+    * Solution:       solution1 (Vivado IP Flow Target)
+    * Product family: zynq
+    * Target device:  xc7z020-clg400-1
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +------------------------+--------+-------+---------+-----------+----------+---------+------+----------+--------+----+-----------+------------+-----+
+    |         Modules        |  Issue |       | Latency |  Latency  | Iteration|         | Trip |          |        |    |           |            |     |
+    |         & Loops        |  Type  | Slack | (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined|  BRAM  | DSP|     FF    |     LUT    | URAM|
+    +------------------------+--------+-------+---------+-----------+----------+---------+------+----------+--------+----+-----------+------------+-----+
+    |+ merge_sort_parallel*  |  Timing|  -5.43|      285|  3.628e+03|         -|      172|     -|  dataflow|  8 (2%)|   -|  4333 (4%)|  5987 (11%)|    -|
+    | + entry_proc           |       -|   3.69|        0|      0.000|         -|        0|     -|        no|       -|   -|    2 (~0%)|    20 (~0%)|    -|
+    | + merge_arrays_2       |  Timing|  -5.43|      171|  2.177e+03|         -|      171|     -|        no|       -|   -|  506 (~0%)|   1150 (2%)|    -|
+    |  o merge_arrays        |      II|   7.30|      169|  2.152e+03|        11|       10|    16|       yes|       -|   -|          -|           -|    -|
+    | + merge_arrays         |  Timing|  -2.66|       35|    350.000|         -|       35|     -|        no|       -|   -|  369 (~0%)|    921 (1%)|    -|
+    |  o merge_arrays        |      II|   7.30|       33|    330.000|         3|        2|    16|       yes|       -|   -|          -|           -|    -|
+    | + merge_arrays_1       |  Timing|  -2.66|       35|    350.000|         -|       35|     -|        no|       -|   -|  369 (~0%)|    921 (1%)|    -|
+    |  o merge_arrays        |      II|   7.30|       33|    330.000|         3|        2|    16|       yes|       -|   -|          -|           -|    -|
+    | + merge_arrays_3       |  Timing|  -2.77|       41|    413.087|         -|       41|     -|        no|       -|   -|  766 (~0%)|   1066 (2%)|    -|
+    |  o merge_arrays        |      II|   7.30|       39|    392.937|        10|        2|    16|       yes|       -|   -|          -|           -|    -|
+    +------------------------+--------+-------+---------+-----------+----------+---------+------+----------+--------+----+-----------+------------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| Interface    | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   | Resource Estimate |
+|              | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |                   |
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| m_axi_a_port | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=4            |
+| m_axi_b_port | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=4            |
++--------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 6             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL     | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER     | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER   | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR   | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | A_1      | 0x10   | 32    | W      | Data signal of A                 |                                                                      |
+| s_axi_control | A_2      | 0x14   | 32    | W      | Data signal of A                 |                                                                      |
+| s_axi_control | B_1      | 0x1c   | 32    | W      | Data signal of B                 |                                                                      |
+| s_axi_control | B_2      | 0x20   | 32    | W      | Data signal of B                 |                                                                      |
++---------------+----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+----------+
+| Argument | Direction | Datatype |
++----------+-----------+----------+
+| A        | in        | float*   |
+| B        | out       | float*   |
++----------+-----------+----------+
+
+* SW-to-HW Mapping
++----------+---------------+-----------+----------+-------------------------------+
+| Argument | HW Interface  | HW Type   | HW Usage | HW Info                       |
++----------+---------------+-----------+----------+-------------------------------+
+| A        | m_axi_a_port  | interface |          |                               |
+| A        | s_axi_control | register  | offset   | name=A_1 offset=0x10 range=32 |
+| A        | s_axi_control | register  | offset   | name=A_2 offset=0x14 range=32 |
+| B        | m_axi_b_port  | interface |          |                               |
+| B        | s_axi_control | register  | offset   | name=B_1 offset=0x1c range=32 |
+| B        | s_axi_control | register  | offset   | name=B_2 offset=0x20 range=32 |
++----------+---------------+-----------+----------+-------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* All M_AXI Variable Accesses
++--------------+----------+-------------------------------+-----------+--------------+--------------+------------------------------+------------+-------------------------------------------+
+| HW Interface | Variable | Access Location               | Direction | Burst Status | Loop         | Loop Location                | Resolution | Problem                                   |
++--------------+----------+-------------------------------+-----------+--------------+--------------+------------------------------+------------+-------------------------------------------+
+| m_axi_a_port | in       | merge_sort_parallel.cpp:16:13 | read      | Fail         | merge_arrays | merge_sort_parallel.cpp:14:3 | 214-229    | Could not analyze pattern                 |
+| m_axi_a_port | in       | merge_sort_parallel.cpp:17:35 | read      | Fail         | merge_arrays | merge_sort_parallel.cpp:14:3 | 214-232    | Access t2 is in the conditional branch    |
+| m_axi_b_port | out      | merge_sort_parallel.cpp:19:11 | write     | Fail         | merge_arrays | merge_sort_parallel.cpp:14:3 | 214-232    | Access store is in the conditional branch |
+| m_axi_b_port | out      | merge_sort_parallel.cpp:23:11 | write     | Fail         | merge_arrays | merge_sort_parallel.cpp:14:3 | 214-232    | Access store is in the conditional branch |
++--------------+----------+-------------------------------+-----------+--------------+--------------+------------------------------+------------+-------------------------------------------+
+
+    * Resolution URL: www.xilinx.com/cgi-bin/docs/rdoc?v=2023.1;t=hls+guidance;d=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++-----------------------+-----+--------+----------+-----+--------+---------+
+| Name                  | DSP | Pragma | Variable | Op  | Impl   | Latency |
++-----------------------+-----+--------+----------+-----+--------+---------+
+| + merge_sort_parallel | 0   |        |          |     |        |         |
+|  + merge_arrays_2     | 0   |        |          |     |        |         |
+|    add_ln14_fu_298_p2 | -   |        | add_ln14 | add | fabric | 0       |
+|    add_ln16_fu_218_p2 | -   |        | add_ln16 | add | fabric | 0       |
+|    add_ln17_fu_269_p2 | -   |        | add_ln17 | add | fabric | 0       |
+|    f2_fu_432_p2       | -   |        | f2       | add | fabric | 0       |
+|    f1_fu_438_p2       | -   |        | f1       | add | fabric | 0       |
+|    i2_10_fu_350_p2    | -   |        | i2_10    | add | fabric | 0       |
+|    i3_fu_460_p2       | -   |        | i3       | add | fabric | 0       |
+|  + merge_arrays       | 0   |        |          |     |        |         |
+|    add_ln14_fu_202_p2 | -   |        | add_ln14 | add | fabric | 0       |
+|    f2_fu_339_p2       | -   |        | f2       | add | fabric | 0       |
+|    f1_fu_345_p2       | -   |        | f1       | add | fabric | 0       |
+|    i2_20_fu_207_p2    | -   |        | i2_20    | add | fabric | 0       |
+|    i3_fu_367_p2       | -   |        | i3       | add | fabric | 0       |
+|  + merge_arrays_1     | 0   |        |          |     |        |         |
+|    add_ln14_fu_202_p2 | -   |        | add_ln14 | add | fabric | 0       |
+|    f2_fu_339_p2       | -   |        | f2       | add | fabric | 0       |
+|    f1_fu_345_p2       | -   |        | f1       | add | fabric | 0       |
+|    i2_15_fu_207_p2    | -   |        | i2_15    | add | fabric | 0       |
+|    i3_fu_367_p2       | -   |        | i3       | add | fabric | 0       |
+|  + merge_arrays_3     | 0   |        |          |     |        |         |
+|    add_ln14_fu_260_p2 | -   |        | add_ln14 | add | fabric | 0       |
+|    add_ln23_fu_410_p2 | -   |        | add_ln23 | add | fabric | 0       |
+|    f2_5_fu_436_p2     | -   |        | f2_5     | add | fabric | 0       |
+|    add_ln19_fu_457_p2 | -   |        | add_ln19 | add | fabric | 0       |
+|    f1_2_fu_483_p2     | -   |        | f1_2     | add | fabric | 0       |
+|    i2_5_fu_335_p2     | -   |        | i2_5     | add | fabric | 0       |
++-----------------------+-----+--------+----------+-----+--------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
++-----------------------+------+------+--------+----------+---------+------+---------+
+| Name                  | BRAM | URAM | Pragma | Variable | Storage | Impl | Latency |
++-----------------------+------+------+--------+----------+---------+------+---------+
+| + merge_sort_parallel | 8    | 0    |        |          |         |      |         |
+|   B_c_U               | -    | -    |        | B_c      | fifo    | srl  | 0       |
+|   temp_U              | 2    | -    |        | temp     | ram_s2p | auto | 1       |
+|   temp_1_U            | 2    | -    |        | temp_1   | ram_s2p | auto | 1       |
+|   temp_2_U            | 2    | -    |        | temp_2   | ram_s2p | auto | 1       |
++-----------------------+------+------+--------+----------+---------+------+---------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Pragmas with Warnings
++----------+---------+---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Type     | Options | Location                                          | Messages                                                                                                                                                                           |
++----------+---------+---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| dataflow |         | merge_sort_parallel.cpp:44 in merge_sort_parallel | Since the only kind of statements allowed in a canonical dataflow region are variable declarations and function calls, the compiler may not be able to correctly handle the region |
++----------+---------+---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+* Valid Pragma Syntax
++-----------------+--------------------------------------------------+-----------------------------------------------------------+
+| Type            | Options                                          | Location                                                  |
++-----------------+--------------------------------------------------+-----------------------------------------------------------+
+| pipeline        | II=1                                             | merge_sort_parallel.cpp:15 in merge_arrays                |
+| interface       | m_axi port=A depth=16 offset=slave bundle=a_port | merge_sort_parallel.cpp:38 in merge_sort_parallel, A      |
+| interface       | m_axi port=B depth=16 offset=slave bundle=b_port | merge_sort_parallel.cpp:39 in merge_sort_parallel, B      |
+| interface       | s_axilite register port=return                   | merge_sort_parallel.cpp:40 in merge_sort_parallel, return |
+| realprobe       |                                                  | merge_sort_parallel.cpp:41 in merge_sort_parallel         |
+| array_partition | variable=temp complete dim=1                     | merge_sort_parallel.cpp:47 in merge_sort_parallel, temp   |
+| unroll          |                                                  | merge_sort_parallel.cpp:54 in merge_sort_parallel         |
++-----------------+--------------------------------------------------+-----------------------------------------------------------+
+
+

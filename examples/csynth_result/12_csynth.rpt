@@ -1,0 +1,131 @@
+
+
+================================================================
+== Synthesis Summary Report of 'pointer_double'
+================================================================
++ General Information: 
+    * Date:           Sun May 19 13:47:04 2024
+    * Version:        2023.1.1 (Build 3869133 on Jun 15 2023)
+    * Project:        project
+    * Solution:       solution1 (Vivado IP Flow Target)
+    * Product family: zynq
+    * Target device:  xc7z020-clg400-1
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +------------------------------+------+------+---------+---------+----------+---------+------+----------+------+----+-----------+-----------+-----+
+    |            Modules           | Issue|      | Latency | Latency | Iteration|         | Trip |          |      |    |           |           |     |
+    |            & Loops           | Type | Slack| (cycles)|   (ns)  |  Latency | Interval| Count| Pipelined| BRAM | DSP|     FF    |    LUT    | URAM|
+    +------------------------------+------+------+---------+---------+----------+---------+------+----------+------+----+-----------+-----------+-----+
+    |+ pointer_double              |     -|  0.14|       28|  280.000|         -|       29|     -|        no|     -|   -|  373 (~0%)|   683 (1%)|    -|
+    | + pointer_double_Pipeline_1  |     -|  2.66|       12|  120.000|         -|       12|     -|        no|     -|   -|   43 (~0%)|   69 (~0%)|    -|
+    |  o Loop 1                    |     -|  7.30|       10|  100.000|         2|        1|    10|       yes|     -|   -|          -|          -|    -|
+    | + sub                        |     -|  0.14|       12|  120.000|         -|       12|     -|        no|     -|   -|   40 (~0%)|  175 (~0%)|    -|
+    |  o VITIS_LOOP_25_1           |     -|  7.30|       10|  100.000|         2|        1|    10|       yes|     -|   -|          -|          -|    -|
+    +------------------------------+------+------+---------+---------+----------+---------+------+----------+------+----+-----------+-----------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 6             | 24     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register  | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL      | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER      | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER    | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR    | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | ap_return | 0x10   | 32    | R      | Data signal of ap_return         |                                                                      |
+| s_axi_control | pos_r     | 0x18   | 32    | W      | Data signal of pos_r             |                                                                      |
+| s_axi_control | x         | 0x20   | 32    | W      | Data signal of x                 |                                                                      |
+| s_axi_control | flag      | 0x28   | 32    | W      | Data signal of flag              |                                                                      |
++---------------+-----------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+----------+
+| Argument | Direction | Datatype |
++----------+-----------+----------+
+| pos      | in        | int      |
+| x        | in        | int      |
+| flag     | in        | int      |
+| return   | out       | int      |
++----------+-----------+----------+
+
+* SW-to-HW Mapping
++----------+---------------+-----------+-------------------------------------+
+| Argument | HW Interface  | HW Type   | HW Info                             |
++----------+---------------+-----------+-------------------------------------+
+| pos      | s_axi_control | interface |                                     |
+| x        | s_axi_control | register  | name=x offset=0x20 range=32         |
+| flag     | s_axi_control | register  | name=flag offset=0x28 range=32      |
+| return   | s_axi_control | register  | name=ap_return offset=0x10 range=32 |
++----------+---------------+-----------+-------------------------------------+
+
+
+================================================================
+== Bind Op Report
+================================================================
++------------------------------+-----+--------+----------+-----+--------+---------+
+| Name                         | DSP | Pragma | Variable | Op  | Impl   | Latency |
++------------------------------+-----+--------+----------+-----+--------+---------+
+| + pointer_double             | 0   |        |          |     |        |         |
+|  + pointer_double_Pipeline_1 | 0   |        |          |     |        |         |
+|    empty_fu_71_p2            | -   |        | empty    | add | fabric | 0       |
+|  + sub                       | 0   |        |          |     |        |         |
+|    add_ln25_fu_78_p2         | -   |        | add_ln25 | add | fabric | 0       |
+|    x_1_fu_109_p2             | -   |        | x_1      | add | fabric | 0       |
++------------------------------+-----+--------+----------+-----+--------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
++------------------------------+------+------+--------+----------------------+---------+------+---------+
+| Name                         | BRAM | URAM | Pragma | Variable             | Storage | Impl | Latency |
++------------------------------+------+------+--------+----------------------+---------+------+---------+
+| + pointer_double             | 0    | 0    |        |                      |         |      |         |
+|   array_U                    | -    | -    |        | array                | ram_1p  | auto | 1       |
+|  + pointer_double_Pipeline_1 | 0    | 0    |        |                      |         |      |         |
+|    pointer_double_array_U    | -    | -    |        | pointer_double_array | rom_1p  | auto | 1       |
++------------------------------+------+------+--------+----------------------+---------+------+---------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-----------+-----------------------+-----------------------------------------------+
+| Type      | Options               | Location                                      |
++-----------+-----------------------+-----------------------------------------------+
+| interface | s_axilite port=x      | pointer_double.c:33 in pointer_double, x      |
+| interface | s_axilite port=pos    | pointer_double.c:34 in pointer_double, pos    |
+| interface | s_axilite port=flag   | pointer_double.c:35 in pointer_double, flag   |
+| interface | s_axilite port=return | pointer_double.c:36 in pointer_double, return |
+| realprobe |                       | pointer_double.c:37 in pointer_double         |
++-----------+-----------------------+-----------------------------------------------+
+
+
