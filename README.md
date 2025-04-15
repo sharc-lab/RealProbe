@@ -16,9 +16,11 @@ It is developed and maintained by [Jiho Kim][1] from [Sharc Lab][2] at [Georgia 
 
 ## Useful Links
 
-Paper: [FCCM 2025][11]
-Docs: [RealProbe][9]
-Tutorial: [FCCM 2024 Tutorial & ESWEEK 2024 Tutorial][10]
+- Paper: [FCCM 2025][11]
+<br>
+- Docs: [RealProbe][9]
+<br>
+- Tutorial: [FCCM 2024 Tutorial & ESWEEK 2024 Tutorial][10]
 
 [9]: https://realprobe-doc.readthedocs.io/en/latest
 [10]: https://sharclab.ece.gatech.edu/open-source-projects/
